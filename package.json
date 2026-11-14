@@ -1,0 +1,33 @@
+{
+  "name": "skyline-protocol",
+  "version": "3.1.0",
+  "description": "Zero-dependency WebGL 3D FPS & 1P/2P Face-to-Face Tabletop Wargame Engine with Mobile-First HUD, Cone Aim-Assist, and AI-Agent Playbooks.",
+  "type": "module",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/guduzhixing/skyline-protocol.git"
+  },
+  "homepage": "https://github.com/guduzhixing/skyline-protocol",
+  "keywords": [
+    "webgl",
+    "threejs",
+    "single-file-html",
+    "mobile-fps",
+    "tabletop-wargame",
+    "pass-and-play",
+    "agent-playbook",
+    "cdp-testing"
+  ],
+  "scripts": {
+    "build": "node scripts/build.mjs --mode=showcase",
+    "build:pure": "node scripts/build.mjs --mode=pure",
+    "build:all": "node scripts/build.mjs --mode=showcase && node scripts/build.mjs --mode=pure",
+    "check": "node scripts/verify-build.mjs --all",
+    "qa": "node scripts/cdp-qa/run-4matrix-qa.mjs",
+    "dev": "node scripts/dev-server.mjs"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  }
+}

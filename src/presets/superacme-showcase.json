@@ -1,0 +1,12 @@
+{
+  "presetId": "superacme-showcase",
+  "mode": "showcase",
+  "description": "Default playable edition bundling CINMOORE / SuperACME visual showcase hardware mapping for real-world brand integration reference.",
+  "assets": {
+    "logo": "assets/presets/superacme/superacme_logo.png",
+    "pt2c": "assets/presets/superacme/sa_pt2c.png",
+    "bc4pro": "assets/presets/superacme/sa_bc4pro.png",
+    "bc6v": "assets/presets/superacme/sa_bc6v.png",
+    "bc22": "assets/presets/superacme/sa_bc22.png"
+  }
+}

@@ -1,0 +1,46 @@
+/* ===================================================================== V3 Tabletop Wargame UI (#tt-ui) */
+#tt-ui { position: absolute; inset: 0; pointer-events: none; z-index: 6; display: none; color: var(--bone); font-family: var(--f-label); }
+#tt-ui.on { display: block; }
+.tt-markers { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
+.tt-nbtn { position: absolute; transform: translate(-50%, -50%); pointer-events: auto; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 1px; background: rgba(7, 13, 22, .84); border: 1.5px solid rgba(56, 232, 255, .45); border-radius: 6px; padding: 3px 6px; color: #eaf6ff; font: 600 10px/1.15 var(--f-mono); backdrop-filter: blur(4px); transition: transform .12s, border-color .15s, background .15s; white-space: nowrap; }
+.tt-nbtn.atk-ctl { border-color: #ffb84d; color: #ffe0a8; }
+.tt-nbtn.def-ctl { border-color: #38e8ff; color: #b6f8ff; }
+.tt-nbtn.reach { border-color: #62e696; background: rgba(14, 52, 34, .92); box-shadow: 0 0 12px rgba(98, 230, 150, .55); transform: translate(-50%, -50%) scale(1.06); }
+.tt-nbtn.target { border-color: #ff5a40; background: rgba(68, 18, 16, .92); box-shadow: 0 0 14px rgba(255, 90, 64, .65); transform: translate(-50%, -50%) scale(1.08); }
+.tt-nbtn .tt-hp { height: 3px; width: 100%; background: rgba(255,255,255,.18); margin-top: 1px; }
+.tt-nbtn .tt-hp i { display: block; height: 100%; background: #62e696; }
+.tt-top-wrap { position: absolute; top: calc(8px + var(--sat)); left: calc(8px + var(--sal)); right: calc(8px + var(--sar)); display: flex; flex-direction: column; align-items: flex-start; gap: 5px; pointer-events: none; z-index: 2; }
+.tt-top { width: 100%; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 6px; pointer-events: none; }
+.tt-pillbar { pointer-events: auto; display: flex; align-items: center; gap: 7px; flex-wrap: wrap; background: rgba(8, 14, 22, .88); border: 1px solid rgba(56, 232, 255, .36); padding: 5px 9px; backdrop-filter: blur(8px); }
+.tt-badge { padding: 3px 7px; font: 700 10.5px/1.2 var(--f-mono); border-radius: 2px; }
+.tt-badge.atk { background: rgba(255, 184, 77, .2); border: 1px solid #ffb84d; color: #ffd996; }
+.tt-badge.def { background: rgba(56, 232, 255, .2); border: 1px solid #38e8ff; color: #a8f8ff; }
+.tt-stat { font: 600 11.5px/1.2 var(--f-mono); color: #e2eef8; }
+.tt-tools { pointer-events: auto; display: flex; align-items: center; gap: 4px; flex-wrap: wrap; }
+.tt-toolbtn { pointer-events: auto; cursor: pointer; background: rgba(8, 14, 22, .88); border: 1px solid rgba(255, 255, 255, .26); color: var(--bone); padding: 5px 8px; font: 600 10.5px/1.1 var(--f-mono); }
+.tt-toolbtn.on { border-color: #38e8ff; color: #8ef5ff; background: rgba(14, 42, 62, .9); }
+.tt-log { max-width: min(360px, 88vw); background: rgba(7, 11, 18, .78); border-left: 2px solid #38e8ff; padding: 4px 9px; font: 500 11px/1.35 var(--f-label); color: rgba(232, 240, 248, .92); pointer-events: none; }
+.tt-dock { position: absolute; left: calc(8px + var(--sal)); right: calc(8px + var(--sar)); bottom: calc(8px + var(--sab)); pointer-events: none; display: flex; flex-direction: column; gap: 5px; max-width: 780px; margin: 0 auto; }
+.tt-row { pointer-events: auto; display: flex; align-items: stretch; gap: 6px; overflow-x: auto; scrollbar-width: none; background: rgba(7, 13, 21, .9); border: 1px solid rgba(56, 232, 255, .32); padding: 6px 8px; backdrop-filter: blur(8px); }
+.tt-pawn { flex: 1 0 110px; max-width: 175px; cursor: pointer; text-align: left; background: rgba(18, 28, 42, .85); border: 1px solid rgba(255, 255, 255, .18); padding: 5px 7px; color: var(--bone); font-family: var(--f-label); }
+.tt-pawn.sel { border-color: #62e696; background: rgba(18, 52, 42, .9); box-shadow: 0 0 12px rgba(98, 230, 150, .35); }
+.tt-pawn.dead { opacity: .4; filter: grayscale(1); pointer-events: none; }
+.tt-pawn .tp-n { font: 700 11.5px/1.2 var(--f-label); color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.tt-pawn .tp-m { margin-top: 2px; font: 500 10px/1.2 var(--f-mono); color: #9deaff; }
+.tt-cards { display: flex; align-items: stretch; gap: 6px; flex: 1 1 auto; overflow-x: auto; }
+.tt-card { flex: 1 0 96px; cursor: pointer; background: rgba(16, 26, 40, .88); border: 1px solid rgba(56, 232, 255, .38); padding: 5px 7px; text-align: left; color: #e8f6ff; }
+.tt-card.disabled { opacity: .42; pointer-events: none; }
+.tt-card .tc-k { font: 700 10.5px/1.2 var(--f-label); color: #ffd47a; }
+.tt-card .tc-d { margin-top: 2px; font: 400 10px/1.2 var(--f-label); color: rgba(212, 228, 244, .82); }
+.tt-endbtn { flex: none; min-width: 90px; cursor: pointer; background: var(--signal); border: 1px solid var(--signal-hot); color: #0b0d0f; font: 900 12.5px/1.2 var(--f-label); letter-spacing: .08em; padding: 6px 10px; }
+.tt-handoff { position: absolute; inset: 0; pointer-events: auto; background: rgba(5, 9, 15, .92); backdrop-filter: blur(12px); display: none; align-items: center; justify-content: center; padding: 20px; z-index: 9; }
+.tt-handoff.on { display: flex; }
+.tt-ho-card { max-width: 400px; width: 100%; background: #0c141f; border: 1px solid rgba(56, 232, 255, .5); border-top: 3px solid #38e8ff; padding: 22px 20px; text-align: center; }
+.tt-ho-card h3 { margin: 0 0 8px; font: 900 22px/1.25 var(--f-display); color: #fff; }
+.tt-ho-card p { margin: 0 0 16px; font: 400 13.5px/1.6 var(--f-label); color: rgba(214, 228, 240, .86); }
+html.is-touch.is-landscape .tt-log { display: none; }
+html.is-touch.is-landscape .tt-dock { gap: 4px; max-width: 680px; bottom: calc(4px + var(--sab)); }
+html.is-touch.is-landscape .tt-row { padding: 4px 6px; gap: 4px; }
+html.is-touch.is-landscape .tt-pawn, html.is-touch.is-landscape .tt-card { padding: 3px 6px; }
+@media (max-width: 600px) { .tt-log { font-size: 10px; padding: 3px 7px; } .tt-nbtn { font-size: 9px; padding: 2px 5px; } }
+</style>

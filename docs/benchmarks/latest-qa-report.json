@@ -1,0 +1,181 @@
+{
+  "executedAt": "2026-11-14T16:02:46.533Z",
+  "targetShowcase": "index.html",
+  "targetPure": "dist/skyline-protocol-open.html",
+  "matrices": {
+    "portraitTitle": {
+      "cl": [
+        "is-touch",
+        "is-portrait"
+      ],
+      "fatal": null,
+      "deploy": {
+        "top": 385,
+        "bottom": 429,
+        "vw": 390,
+        "vh": 844
+      },
+      "modesCount": 3
+    },
+    "portraitFPS": {
+      "state": "playing",
+      "isTouch": true,
+      "hasFindAssist": true,
+      "hasLockPrompt": false,
+      "assistText": "自动开火:开",
+      "afterToggle": "仅手控:关",
+      "checkedElements": 12,
+      "overlaps": [],
+      "oob": []
+    },
+    "landscapeFPS": {
+      "classes": [
+        "is-touch",
+        "is-landscape"
+      ],
+      "checkedElements": 12,
+      "overlaps": [],
+      "oob": []
+    },
+    "tabletop1P": {
+      "titleStateAfterBack": "title",
+      "tt1pStart": {
+        "gameState": "tabletop",
+        "st": {
+          "active": true,
+          "mode": "tt1p",
+          "round": 1,
+          "side": "atk",
+          "ap": 4,
+          "nodes": 11,
+          "camYaw": -1.5707963267948966,
+          "camTargetYaw": -1.5707963267948966,
+          "pawns": [
+            {
+              "id": "a1",
+              "side": "atk",
+              "hp": 120,
+              "nodeId": "m_gate"
+            },
+            {
+              "id": "a2",
+              "side": "atk",
+              "hp": 95,
+              "nodeId": "m_gate"
+            },
+            {
+              "id": "a3",
+              "side": "atk",
+              "hp": 80,
+              "nodeId": "m_gate"
+            },
+            {
+              "id": "d1",
+              "side": "def",
+              "hp": 135,
+              "nodeId": "m_c3"
+            },
+            {
+              "id": "d2",
+              "side": "def",
+              "hp": 95,
+              "nodeId": "m_w2"
+            },
+            {
+              "id": "d3",
+              "side": "def",
+              "hp": 85,
+              "nodeId": "m_e2"
+            }
+          ]
+        },
+        "markersCount": 11,
+        "reachCount": 2,
+        "markerCollisions": 0
+      },
+      "tt1pAfterAct": {
+        "st": {
+          "active": true,
+          "mode": "tt1p",
+          "round": 1,
+          "side": "atk",
+          "ap": 1,
+          "nodes": 11,
+          "camYaw": -1.5707963267948966,
+          "camTargetYaw": -1.5707963267948966,
+          "pawns": [
+            {
+              "id": "a1",
+              "side": "atk",
+              "hp": 120,
+              "nodeId": "m_w1"
+            },
+            {
+              "id": "a2",
+              "side": "atk",
+              "hp": 95,
+              "nodeId": "m_gate"
+            },
+            {
+              "id": "a3",
+              "side": "atk",
+              "hp": 80,
+              "nodeId": "m_gate"
+            },
+            {
+              "id": "d1",
+              "side": "def",
+              "hp": 110,
+              "nodeId": "m_c3"
+            },
+            {
+              "id": "d2",
+              "side": "def",
+              "hp": 70,
+              "nodeId": "m_w2"
+            },
+            {
+              "id": "d3",
+              "side": "def",
+              "hp": 60,
+              "nodeId": "m_e2"
+            }
+          ]
+        }
+      }
+    },
+    "tabletop2P": {
+      "handoffShown": true,
+      "yawDeltaRad": 3.117,
+      "targetDelta": 3.142,
+      "missionId": 1
+    },
+    "tabletopDebrief": {
+      "gameState": "complete",
+      "kicker": "东海深蓝港区 · 2P 双人面对面战棋简报",
+      "title": "成功坚守满 6 轮高压推演，守方胜利！",
+      "backBtnBot": 766,
+      "vh": 800,
+      "ttRem": 0
+    },
+    "desktopRegression": {
+      "state": "title",
+      "isTouchClass": false,
+      "inputTouch": false,
+      "eyebrowTop": 93,
+      "deployBot": 760,
+      "vh": 900,
+      "fatal": null,
+      "fpsState": "playing",
+      "billboardsAfterDeploy": 3
+    },
+    "pureOpenBoot": {
+      "title": "苍穹防线：零号协议 V3 · 手游×桌游双栖 3A 战术大作",
+      "fatal": null,
+      "state": "title",
+      "brandHitsInDOM": 0
+    }
+  },
+  "runtimeErrors": [],
+  "durationMs": 52585
+}

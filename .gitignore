@@ -1,0 +1,19 @@
+# OS & editor artifacts
+.DS_Store
+Thumbs.db
+*.log
+*.tmp
+
+# Local Chrome CDP / Playwright temporary profiles (never commit browser state)
+chrome_profile*/
+.cdp-profile*/
+*.har
+
+# Video renders & local scratch archives (keep binary showcase assets small)
+*.mp4
+*.mov
+*.webm
+
+# Optional npm cache if a dev runs extra local tooling
+node_modules/
+npm-debug.log*
