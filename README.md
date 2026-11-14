@@ -17,8 +17,8 @@
 - **For WebGL & Game Developers (对开发者)**: A complete, runnable blueprint solving painful mobile WebGL issues: portrait/landscape 4-quadrant HUD separation, invisible overlay `pointer-events` traps, PointerLock mobile crashes, 3D-to-2D safe-zone marker clamping, and zero-dependency Chrome CDP WebGL2 automated testing (`npm run qa`).
 - **For AI Coding Agents (对 Agent / Copilot 协同开发)**: Ships **`AGENTS.md`**, **`CLAUDE.md`**, and **6 field-tested Engineering Playbooks** ([`docs/agent-playbook/`](./docs/agent-playbook)) showing how to safely modularize and evolve a `1.6 MB` Three.js bundle without breaking closures or UI layouts.
 - **Clean License & Brand Separation (双模式合规开源)**:
-  - **`--mode=showcase`** (`index.html`, `1,641,797 B`): Includes the full interactive positive hardware showcase integration (**CINMOORE 神眸 / SuperACME**, covered separately under [`THIRD_PARTY_NOTICES.md`](./THIRD_PARTY_NOTICES.md)).
-  - **`--mode=pure`** (`dist/skyline-protocol-open.html`, `1,571,882 B`): Replaces every third-party logo and trademark with MIT-clean SVG vector emblems and neutral designations (`SENTRY-X1`, `DUO-EYE`, `TAC-CAM`, `SUPPLY-POD`), automatically verified to have **`brandHitsInDOM: 0`**.
+  - **`--mode=showcase`** (`index.html`, `1,642,122 B`): Includes the full interactive positive hardware showcase integration (**CINMOORE 神眸 / SuperACME**, covered separately under [`THIRD_PARTY_NOTICES.md`](./THIRD_PARTY_NOTICES.md)).
+  - **`--mode=pure`** (`dist/skyline-protocol-open.html`, `1,572,207 B`): Replaces every third-party logo and trademark with MIT-clean SVG vector emblems and neutral designations (`SENTRY-X1`, `DUO-EYE`, `TAC-CAM`, `SUPPLY-POD`), automatically verified to have **`brandHitsInDOM: 0`**.
 
 ---
 
@@ -66,11 +66,11 @@ skyline-protocol/
 ├── THIRD_PARTY_NOTICES.md           # Explicit IP boundary between MIT engine & showcase PNGs
 ├── CONTRIBUTING.md
 ├── CHANGELOG.md
-├── package.json                     # Zero runtime dependencies (Node >= 20 built-ins only)
-├── index.html                       # Compiled single-file Showcase edition (1,641,797 B)
+├── package.json                     # Zero runtime dependencies (Node >= 22 built-ins only)
+├── index.html                       # Compiled single-file Showcase edition (1,642,122 B)
 ├── dist/
 │   ├── skyline-protocol-standalone.html  # Standalone Showcase artifact
-│   └── skyline-protocol-open.html        # 100% MIT-clean Neutral Open edition (1,571,882 B)
+│   └── skyline-protocol-open.html        # 100% MIT-clean Neutral Open edition (1,572,207 B)
 ├── assets/presets/superacme/        # Hardware showcase PNGs referenced by superacme-showcase.json
 ├── src/
 │   ├── core/engine-base.html        # Verified V2 Three.js r180 base engine (1,590,585 B)
@@ -112,7 +112,7 @@ skyline-protocol/
 
 ## 📊 Verified QA Gate Summary (`npm run qa`)
 
-Latest run recorded in [`docs/benchmarks/latest-qa-report.json`](./docs/benchmarks/latest-qa-report.json) (`53,728 ms`):
+Latest run recorded in [`docs/benchmarks/latest-qa-report.json`](./docs/benchmarks/latest-qa-report.json) (`52,526 ms`):
 - **Portrait FPS (`390×844`)**: `12` active HUD elements audited -> **`overlaps: []`**, **`oob: []`**, zero lock prompt leaks, `#t-assist-btn` live toggle verified.
 - **Landscape FPS (`844×390`)**: `is-landscape` active -> `12` elements audited -> **`overlaps: []`**, **`oob: []`**.
 - **Tabletop 1P & 2P (`390×844` -> `844×390` -> `1280×800`)**: `11` 3D-projected node buttons clamped dynamically -> **`markerCollisions: 0`**, `#tt-handoff` triggers smooth **`3.142 rad` (`180°`)** target camera flip, debrief preserves tabletop title, exit cleans `tabletop-board` children to **`0`**.

@@ -19,8 +19,10 @@ export const MOBILE_PATCHES = [
     target: 'bindSAImgs(document);',
     replacement: `bindSAImgs(document);
 const IS_TOUCH_DEV=/Android|iPhone|iPad|iPod|Mobile|HarmonyOS/i.test(navigator.userAgent)||(typeof window<"u"&&(("ontouchstart"in window)||window.matchMedia&&window.matchMedia("(pointer: coarse)").matches))||(navigator.maxTouchPoints>0&&Math.min(innerWidth,innerHeight)<1024);
-function syncViewportEnv(){let doc=document.documentElement;let isMob=IS_TOUCH_DEV||innerWidth<900&&("ontouchstart"in window||navigator.maxTouchPoints>0);doc.classList.toggle("is-touch",!!isMob);let land=innerWidth>innerHeight&&innerHeight<=560;doc.classList.toggle("is-portrait",!!isMob&&!land);doc.classList.toggle("is-landscape",!!isMob&&!!land)}
-syncViewportEnv(),addEventListener("resize",syncViewportEnv),addEventListener("orientationchange",()=>setTimeout(syncViewportEnv,80));
+let _svW=0,_svH=0;
+function syncViewportEnv(){_svW=innerWidth,_svH=innerHeight;let doc=document.documentElement;let isMob=IS_TOUCH_DEV||innerWidth<900&&("ontouchstart"in window||navigator.maxTouchPoints>0);doc.classList.toggle("is-touch",!!isMob);let land=innerWidth>innerHeight&&innerHeight<=560;doc.classList.toggle("is-portrait",!!isMob&&!land);doc.classList.toggle("is-landscape",!!isMob&&!!land)}
+window.__syncViewportEnv=syncViewportEnv;
+syncViewportEnv(),addEventListener("resize",syncViewportEnv),addEventListener("orientationchange",()=>setTimeout(syncViewportEnv,80)),window.matchMedia&&window.matchMedia("(orientation: landscape)").addEventListener&&window.matchMedia("(orientation: landscape)").addEventListener("change",syncViewportEnv);
 `
   },
   {

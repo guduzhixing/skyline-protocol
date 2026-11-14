@@ -24,6 +24,15 @@ async function waitEngineReady(ev) {
   throw new Error('Engine timed out waiting for window.__ready && window.__frames > 4');
 }
 
+async function waitUntil(ev, expr, msg, maxMs = 8000) {
+  const deadline = Date.now() + maxMs;
+  while (Date.now() < deadline) {
+    if (await ev(expr)) return;
+    await sleep(150);
+  }
+  throw new Error(`Timed out after ${maxMs}ms waiting for: ${msg}`);
+}
+
 async function run() {
   const session = await launchCdpSession({ port: 9242 });
   const { cdp, ev, tapEl, checkOverlaps, runtimeErrors, close } = session;
@@ -95,8 +104,12 @@ async function run() {
     report.matrices.portraitFPS = { ...portFpsState, afterToggle, checkedElements: portHudCheck.checked, overlaps: portHudCheck.overlaps, oob: portHudCheck.oob };
 
     // ==================== MATRIX 2: MOBILE LANDSCAPE 844x390 ====================
-    await cdp('Emulation.setDeviceMetricsOverride', { width: 844, height: 390, deviceScaleFactor: 2, mobile: true });
-    await sleep(450);
+    await cdp('Emulation.setDeviceMetricsOverride', {
+      width: 844, height: 390, deviceScaleFactor: 2, mobile: true,
+      screenOrientation: { type: 'landscapePrimary', angle: 90 }
+    });
+    await waitUntil(ev, `innerWidth === 844 && innerHeight === 390 && document.documentElement.classList.contains('is-landscape')`, 'landscape viewport & is-landscape class');
+    await sleep(250);
     const landHudCheck = await checkOverlaps(HUD_SELECTORS);
     const landClasses = await ev('[...document.documentElement.classList]');
     assert.ok(landClasses.includes('is-landscape'), 'Expected is-landscape class');
@@ -105,8 +118,11 @@ async function run() {
     report.matrices.landscapeFPS = { classes: landClasses, checkedElements: landHudCheck.checked, overlaps: landHudCheck.overlaps, oob: landHudCheck.oob };
 
     // ==================== MATRIX 3: TABLETOP 1P & 2P FACE-TO-FACE ====================
-    await cdp('Emulation.setDeviceMetricsOverride', { width: 390, height: 844, deviceScaleFactor: 2, mobile: true });
-    await sleep(300);
+    await cdp('Emulation.setDeviceMetricsOverride', {
+      width: 390, height: 844, deviceScaleFactor: 2, mobile: true,
+      screenOrientation: { type: 'portraitPrimary', angle: 0 }
+    });
+    await waitUntil(ev, `innerWidth === 390 && document.documentElement.classList.contains('is-portrait')`, 'portrait restore before tabletop');
     await tapEl('.t-pause');
     await tapEl('[data-s="paused"] [data-act="backtitle"]');
     await sleep(300);
@@ -145,15 +161,19 @@ async function run() {
     await tapEl('[data-pmode="tt2p"]');
     await tapEl('[data-act="deploy"]');
     await sleep(350);
-    await cdp('Emulation.setDeviceMetricsOverride', { width: 844, height: 390, deviceScaleFactor: 2, mobile: true });
-    await sleep(350);
+    await cdp('Emulation.setDeviceMetricsOverride', {
+      width: 844, height: 390, deviceScaleFactor: 2, mobile: true,
+      screenOrientation: { type: 'landscapePrimary', angle: 90 }
+    });
+    await waitUntil(ev, `innerWidth === 844 && document.documentElement.classList.contains('is-landscape')`, 'tabletop 2P landscape');
+    await sleep(250);
 
     const beforeCam = await ev('({ yaw: Math.atan2(window.__G.camera.position.x, window.__G.camera.position.z), target: window.__G.tabletop.getState().camTargetYaw })');
     await tapEl('#tt-endturn-btn');
     await sleep(250);
     const handoffShown = await ev(`document.querySelector('#tt-handoff').classList.contains('on')`);
     await tapEl('#tt-ho-go');
-    await sleep(1300);
+    await waitUntil(ev, `(() => { const st = window.__G.tabletop.getState(); return Math.abs(st.camTargetYaw - st.camYaw) < 0.12; })()`, 'tabletop 180-deg camera flip settle', 9000);
     const afterCam = await ev('({ yaw: Math.atan2(window.__G.camera.position.x, window.__G.camera.position.z), target: window.__G.tabletop.getState().camTargetYaw })');
     let yawDelta = Math.abs(afterCam.yaw - beforeCam.yaw);
     if (yawDelta > Math.PI) yawDelta = Math.abs(yawDelta - 2 * Math.PI);

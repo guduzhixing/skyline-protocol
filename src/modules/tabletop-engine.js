@@ -422,6 +422,6 @@ let rc=U.target.closest(".m-rcard");if(rc&&s.contains(rc)){`
   {
     label: 'mM-B-tabletop-loop',
     target: 'function B(P){switch(u+=P,_.state){case"title":return z(P),!1;',
-    replacement: 'function B(P){switch(u+=P,_.state){case"title":return ttUI.classList.remove("on"),z(P),!1;case"tabletop":return i.tabletop&&i.tabletop.update(P),!1;'
+    replacement: 'function B(P){(_svW!==innerWidth||_svH!==innerHeight)&&syncViewportEnv();switch(u+=P,_.state){case"title":return ttUI.classList.remove("on"),z(P),!1;case"tabletop":return i.tabletop&&i.tabletop.update(P),!1;'
   }
 ];

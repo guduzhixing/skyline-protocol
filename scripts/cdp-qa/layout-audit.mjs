@@ -56,15 +56,19 @@ export async function launchCdpSession({ port = 9242, profileTag = 'skyline_qa' 
     '--no-first-run',
     '--no-default-browser-check',
     '--remote-allow-origins=*',
-    '--remote-debugging-address=127.0.0.1',
-    `--remote-debugging-port=${port}`,
+    '--remote-debugging-port=0',
     `--user-data-dir=${profileDir}`,
     'about:blank'
   ], { env: childEnv, stdio: ['ignore', 'ignore', 'pipe'] });
+  let devtoolsHost = null;
   proc.stderr?.on('data', chunk => {
     const s = chunk.toString();
     if (procErrHead.length < 1800) procErrHead += s.slice(0, 1800 - procErrHead.length);
     procErrTail = (procErrTail + s).slice(-1800);
+    if (!devtoolsHost) {
+      const m = procErrTail.match(/DevTools listening on (ws:\/\/\S+)/);
+      if (m) devtoolsHost = new URL(m[1]).host;
+    }
   });
   proc.on('exit', (code, sig) => {
     exitedInfo = `code=${code}, signal=${sig}`;
@@ -78,24 +82,25 @@ export async function launchCdpSession({ port = 9242, profileTag = 'skyline_qa' 
   let lastPollErr = '';
   for (let i = 0; i < 120; i++) {
     if (exitedInfo) break;
+    const hostToTry = devtoolsHost || `127.0.0.1:${port}`;
     try {
-      const list = await (await fetch(`http://127.0.0.1:${port}/json/list`)).json();
+      const list = await (await fetch(`http://${hostToTry}/json/list`)).json();
       const target = list.find(x => x.type === 'page') || list[0];
       if (target?.webSocketDebuggerUrl) {
         ws = new WebSocket(target.webSocketDebuggerUrl);
         await new Promise((res, rej) => { ws.onopen = res; ws.onerror = rej; });
         break;
       }
-      lastPollErr = `json/list returned ${list.length} targets`;
+      lastPollErr = `json/list on ${hostToTry} returned ${list.length} targets`;
     } catch (err) {
-      lastPollErr = err?.message || String(err);
+      lastPollErr = `poll ${hostToTry}: ${err?.message || String(err)}`;
     }
     await sleep(250);
   }
   if (!ws) {
     try { proc.kill('SIGKILL'); } catch {}
     throw new Error(
-      `Failed to connect to Chrome CDP on port ${port} (${exitedInfo || 'still running after 30s'}; lastPoll=${lastPollErr})` +
+      `Failed to connect to Chrome CDP (${exitedInfo || 'still running after 30s'}; lastPoll=${lastPollErr})` +
       (procErrHead ? `\n--- Chrome stderr head ---\n${procErrHead}` : '') +
       (procErrTail ? `\n--- Chrome stderr tail ---\n${procErrTail}` : '')
     );

@@ -1,5 +1,5 @@
 {
-  "executedAt": "2026-11-14T16:25:44.874Z",
+  "executedAt": "2026-11-14T16:33:56.279Z",
   "targetShowcase": "index.html",
   "targetPure": "dist/skyline-protocol-open.html",
   "matrices": {
@@ -146,7 +146,7 @@
     },
     "tabletop2P": {
       "handoffShown": true,
-      "yawDeltaRad": 3.117,
+      "yawDeltaRad": 3.043,
       "targetDelta": 3.142,
       "missionId": 1
     },
@@ -177,5 +177,5 @@
     }
   },
   "runtimeErrors": [],
-  "durationMs": 53728
+  "durationMs": 52526
 }

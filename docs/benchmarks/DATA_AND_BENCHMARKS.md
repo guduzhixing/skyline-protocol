@@ -10,8 +10,8 @@ All file sizes, symbol checks, and runtime assertions below are directly measure
 | --- | --- | --- | --- | --- | --- |
 | **V1 Baseline** (`几猫国产3A大作_V1.html`) | Procedural Three.js r180 PBR engine, East Sea Bridge (`east_sea_mega_bridge`), FPS combat, basic touch stick | Legacy standalone HTML (unmodified baseline) | `1,425,707 B` | — | 0 |
 | **V2 Strategic Upgrade** (`src/core/engine-base.html`) | Mission 2 (*Red Sand Spaceport*), asymmetric 4-wave balance, `7.5s` combo decay, 8 ranks & 10 medals (`skyline.career.v2`), Tier +1 ladder, `SA_ASSETS` showcase integration | `engine-base.html` | `1,590,585 B` | — | 5 PNGs inline |
-| **V3.1 Showcase Build** (`index.html`) | Modular `src/` overlay (`35` injected slots), Portrait + Landscape mobile 4-quadrant HUD, cone aim-assist (`findMobAssistTarget`), auto-fire pill, gyro option, 11-node **1P/2P Tabletop Wargame** + 180° flip | `index.html` & `dist/skyline-protocol-standalone.html` | `1,641,797 B` | `1,574,978 B` | 5 PNGs inline |
-| **V3.1 Pure Open Build** (`dist/skyline-protocol-open.html`) | Full V3.1 FPS + Tabletop engine with SVG emblems and neutral tactical nomenclature (`SENTRY-X1`, `DUO-EYE`, `TAC-CAM`, `SUPPLY-POD`) | `dist/skyline-protocol-open.html` | `1,571,882 B` | `1,505,074 B` | 0 (100% SVG) |
+| **V3.1 Showcase Build** (`index.html`) | Modular `src/` overlay (`35` injected slots), Portrait + Landscape mobile 4-quadrant HUD, cone aim-assist (`findMobAssistTarget`), auto-fire pill, gyro option, 11-node **1P/2P Tabletop Wargame** + 180° flip | `index.html` & `dist/skyline-protocol-standalone.html` | `1,642,122 B` | `1,575,303 B` | 5 PNGs inline |
+| **V3.1 Pure Open Build** (`dist/skyline-protocol-open.html`) | Full V3.1 FPS + Tabletop engine with SVG emblems and neutral tactical nomenclature (`SENTRY-X1`, `DUO-EYE`, `TAC-CAM`, `SUPPLY-POD`) | `dist/skyline-protocol-open.html` | `1,572,207 B` | `1,505,399 B` | 0 (100% SVG) |
 
 > **Verification Command**: `npm run check` validates `node --check` ES syntax on the extracted `<script>` payload of all three built HTML files plus all modular scripts under `src/modules/` and `scripts/cdp-qa/`, checks `7` core runtime anchors, verifies `0` legacy `几猫` tokens, and confirms `0` third-party brand tokens or raster PNGs inside `dist/skyline-protocol-open.html`.
 
@@ -19,7 +19,7 @@ All file sizes, symbol checks, and runtime assertions below are directly measure
 
 ## 2. Headless Chrome CDP + SwiftShader WebGL2 Verification Matrix
 
-Executed by `scripts/cdp-qa/run-4matrix-qa.mjs` (`durationMs: 53728`, `executedAt: 2026-11-14T16:25:44.874Z`):
+Executed by `scripts/cdp-qa/run-4matrix-qa.mjs` (`durationMs: 52526`, `executedAt: 2026-11-14T16:33:56.279Z`):
 
 | Matrix ID | Emulated Device / Mode | Key Functional & Geometric Checks | Observed Telemetry Result |
 | --- | --- | --- | --- |
