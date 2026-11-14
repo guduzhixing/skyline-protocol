@@ -29,25 +29,34 @@ export async function launchCdpSession({ port = 9242, profileTag = 'skyline_qa' 
   const profileDir = path.join(os.tmpdir(), `${profileTag}_${process.pid}`);
   fs.mkdirSync(profileDir, { recursive: true });
 
+  let procErr = '';
   const proc = spawn(chromeBin, [
     '--headless=new',
+    '--disable-dev-shm-usage',
+    '--disable-setuid-sandbox',
     '--disable-gpu-sandbox',
     '--enable-webgl',
     '--use-gl=angle',
     '--use-angle=swiftshader',
     '--enable-unsafe-swiftshader',
     '--no-sandbox',
+    '--no-first-run',
+    '--no-default-browser-check',
+    '--remote-debugging-address=127.0.0.1',
     `--remote-debugging-port=${port}`,
     `--user-data-dir=${profileDir}`,
     'about:blank'
-  ], { stdio: 'ignore' });
+  ], { stdio: ['ignore', 'ignore', 'pipe'] });
+  proc.stderr?.on('data', chunk => {
+    procErr = (procErr + chunk.toString()).slice(-2000);
+  });
 
   let ws = null;
   let mid = 1;
   const pend = new Map();
   const runtimeErrors = [];
 
-  for (let i = 0; i < 50; i++) {
+  for (let i = 0; i < 60; i++) {
     try {
       const list = await (await fetch(`http://127.0.0.1:${port}/json/list`)).json();
       const target = list.find(x => x.type === 'page') || list[0];
@@ -61,7 +70,7 @@ export async function launchCdpSession({ port = 9242, profileTag = 'skyline_qa' 
   }
   if (!ws) {
     proc.kill('SIGKILL');
-    throw new Error(`Failed to connect to Chrome CDP on port ${port}`);
+    throw new Error(`Failed to connect to Chrome CDP on port ${port}${procErr ? `\nChrome stderr:\n${procErr}` : ''}`);
   }
 
   ws.onmessage = e => {
