@@ -6,7 +6,7 @@
 
 ## 1. Zero-Dependency CDP Architecture (`scripts/cdp-qa/`)
 
-Since Node `>=20` ships built-in global `fetch` and `WebSocket`, an entire deterministic WebGL2 end-to-end QA harness fits cleanly into **`layout-audit.mjs` (~110 lines)**:
+Since Node `>=22` ships built-in global `fetch` and stable `WebSocket` (whereas Node `20` lacked unflagged global `WebSocket` — ALWAYS fail fast if `typeof WebSocket !== 'function'` and never swallow polling exceptions inside empty `catch {}`!), an entire deterministic WebGL2 end-to-end QA harness fits cleanly into **`layout-audit.mjs` (~140 lines)**:
 
 ```js
 spawn(chromeBin, [

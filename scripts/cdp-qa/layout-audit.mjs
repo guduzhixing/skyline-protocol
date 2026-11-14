@@ -25,6 +25,9 @@ export function resolveChromeExecutable() {
 }
 
 export async function launchCdpSession({ port = 9242, profileTag = 'skyline_qa' } = {}) {
+  if (typeof WebSocket !== 'function') {
+    throw new Error(`Global WebSocket is unavailable in Node ${process.version}; Node.js >= 22 is required.`);
+  }
   const chromeBin = resolveChromeExecutable();
   const profileDir = path.join(os.tmpdir(), `${profileTag}_${process.pid}`);
   fs.mkdirSync(profileDir, { recursive: true });
@@ -72,6 +75,7 @@ export async function launchCdpSession({ port = 9242, profileTag = 'skyline_qa' 
   const pend = new Map();
   const runtimeErrors = [];
 
+  let lastPollErr = '';
   for (let i = 0; i < 120; i++) {
     if (exitedInfo) break;
     try {
@@ -79,16 +83,19 @@ export async function launchCdpSession({ port = 9242, profileTag = 'skyline_qa' 
       const target = list.find(x => x.type === 'page') || list[0];
       if (target?.webSocketDebuggerUrl) {
         ws = new WebSocket(target.webSocketDebuggerUrl);
-        await new Promise(r => { ws.onopen = r; });
+        await new Promise((res, rej) => { ws.onopen = res; ws.onerror = rej; });
         break;
       }
-    } catch {}
+      lastPollErr = `json/list returned ${list.length} targets`;
+    } catch (err) {
+      lastPollErr = err?.message || String(err);
+    }
     await sleep(250);
   }
   if (!ws) {
     try { proc.kill('SIGKILL'); } catch {}
     throw new Error(
-      `Failed to connect to Chrome CDP on port ${port} (${exitedInfo || 'still running after 30s'})` +
+      `Failed to connect to Chrome CDP on port ${port} (${exitedInfo || 'still running after 30s'}; lastPoll=${lastPollErr})` +
       (procErrHead ? `\n--- Chrome stderr head ---\n${procErrHead}` : '') +
       (procErrTail ? `\n--- Chrome stderr tail ---\n${procErrTail}` : '')
     );

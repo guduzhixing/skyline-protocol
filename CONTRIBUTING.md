@@ -5,7 +5,7 @@ Thank you for helping grow **Skyline Protocol** into a practical open-source ref
 ## Design Principles
 
 1. **Zero Runtime Dependencies (`0` npm runtime deps)**:
-   Everything in `scripts/` and `scripts/cdp-qa/` must run on standard Node.js `>=20` built-ins (`node:fs`, `node:path`, `node:http`, `node:child_process`, global `fetch` / `WebSocket`). No `webpack`, `vite`, `puppeteer`, or `playwright` packages required.
+   Everything in `scripts/` and `scripts/cdp-qa/` must run on standard Node.js `>=22` built-ins (`node:fs`, `node:path`, `node:http`, `node:child_process`, global `fetch` / `WebSocket`). No `webpack`, `vite`, `puppeteer`, or `playwright` packages required.
 2. **Modular Source -> Single-File Deliverable**:
    Never treat compiled `index.html` or `dist/*.html` as the hand-edited source of truth for V3 layers. Edit files in:
    - `src/styles/` (CSS rules)
