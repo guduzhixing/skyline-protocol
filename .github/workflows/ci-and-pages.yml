@@ -33,8 +33,12 @@ jobs:
         run: |
           CHROME_BIN=$(command -v google-chrome || command -v chromium || command -v chromium-browser || true)
           if [ -n "$CHROME_BIN" ]; then
-            echo "Running CDP QA with $CHROME_BIN"
-            CHROME_PATH="$CHROME_BIN" npm run qa
+            echo "Detected browser: $("$CHROME_BIN" --version || true)"
+            if command -v xvfb-run >/dev/null 2>&1; then
+              CHROME_PATH="$CHROME_BIN" xvfb-run -a npm run qa
+            else
+              CHROME_PATH="$CHROME_BIN" npm run qa
+            fi
           else
             echo "::warning::No Chrome/Chromium binary available on runner; skipped WebGL2 CDP QA"
           fi

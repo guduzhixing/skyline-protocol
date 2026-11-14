@@ -29,12 +29,22 @@ export async function launchCdpSession({ port = 9242, profileTag = 'skyline_qa' 
   const profileDir = path.join(os.tmpdir(), `${profileTag}_${process.pid}`);
   fs.mkdirSync(profileDir, { recursive: true });
 
-  let procErr = '';
+  let procErrHead = '';
+  let procErrTail = '';
+  let exitedInfo = null;
+  const childEnv = { ...process.env };
+  if (process.platform !== 'win32') {
+    delete childEnv.DBUS_SESSION_BUS_ADDRESS;
+  }
+
   const proc = spawn(chromeBin, [
     '--headless=new',
     '--disable-dev-shm-usage',
     '--disable-setuid-sandbox',
     '--disable-gpu-sandbox',
+    '--ignore-gpu-blocklist',
+    '--password-store=basic',
+    '--use-mock-keychain',
     '--enable-webgl',
     '--use-gl=angle',
     '--use-angle=swiftshader',
@@ -42,13 +52,19 @@ export async function launchCdpSession({ port = 9242, profileTag = 'skyline_qa' 
     '--no-sandbox',
     '--no-first-run',
     '--no-default-browser-check',
+    '--remote-allow-origins=*',
     '--remote-debugging-address=127.0.0.1',
     `--remote-debugging-port=${port}`,
     `--user-data-dir=${profileDir}`,
     'about:blank'
-  ], { stdio: ['ignore', 'ignore', 'pipe'] });
+  ], { env: childEnv, stdio: ['ignore', 'ignore', 'pipe'] });
   proc.stderr?.on('data', chunk => {
-    procErr = (procErr + chunk.toString()).slice(-2000);
+    const s = chunk.toString();
+    if (procErrHead.length < 1800) procErrHead += s.slice(0, 1800 - procErrHead.length);
+    procErrTail = (procErrTail + s).slice(-1800);
+  });
+  proc.on('exit', (code, sig) => {
+    exitedInfo = `code=${code}, signal=${sig}`;
   });
 
   let ws = null;
@@ -56,7 +72,8 @@ export async function launchCdpSession({ port = 9242, profileTag = 'skyline_qa' 
   const pend = new Map();
   const runtimeErrors = [];
 
-  for (let i = 0; i < 60; i++) {
+  for (let i = 0; i < 120; i++) {
+    if (exitedInfo) break;
     try {
       const list = await (await fetch(`http://127.0.0.1:${port}/json/list`)).json();
       const target = list.find(x => x.type === 'page') || list[0];
@@ -69,8 +86,12 @@ export async function launchCdpSession({ port = 9242, profileTag = 'skyline_qa' 
     await sleep(250);
   }
   if (!ws) {
-    proc.kill('SIGKILL');
-    throw new Error(`Failed to connect to Chrome CDP on port ${port}${procErr ? `\nChrome stderr:\n${procErr}` : ''}`);
+    try { proc.kill('SIGKILL'); } catch {}
+    throw new Error(
+      `Failed to connect to Chrome CDP on port ${port} (${exitedInfo || 'still running after 30s'})` +
+      (procErrHead ? `\n--- Chrome stderr head ---\n${procErrHead}` : '') +
+      (procErrTail ? `\n--- Chrome stderr tail ---\n${procErrTail}` : '')
+    );
   }
 
   ws.onmessage = e => {

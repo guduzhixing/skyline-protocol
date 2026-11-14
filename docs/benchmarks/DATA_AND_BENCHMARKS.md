@@ -19,7 +19,7 @@ All file sizes, symbol checks, and runtime assertions below are directly measure
 
 ## 2. Headless Chrome CDP + SwiftShader WebGL2 Verification Matrix
 
-Executed by `scripts/cdp-qa/run-4matrix-qa.mjs` (`durationMs: 54568`, `executedAt: 2026-11-14T16:11:18.305Z`):
+Executed by `scripts/cdp-qa/run-4matrix-qa.mjs` (`durationMs: 54066`, `executedAt: 2026-11-14T16:19:11.365Z`):
 
 | Matrix ID | Emulated Device / Mode | Key Functional & Geometric Checks | Observed Telemetry Result |
 | --- | --- | --- | --- |

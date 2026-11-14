@@ -1,5 +1,5 @@
 {
-  "executedAt": "2026-11-14T16:11:18.305Z",
+  "executedAt": "2026-11-14T16:19:11.365Z",
   "targetShowcase": "index.html",
   "targetPure": "dist/skyline-protocol-open.html",
   "matrices": {
@@ -177,5 +177,5 @@
     }
   },
   "runtimeErrors": [],
-  "durationMs": 54568
+  "durationMs": 54066
 }

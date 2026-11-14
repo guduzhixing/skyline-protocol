@@ -112,7 +112,7 @@ skyline-protocol/
 
 ## 📊 Verified QA Gate Summary (`npm run qa`)
 
-Latest run recorded in [`docs/benchmarks/latest-qa-report.json`](./docs/benchmarks/latest-qa-report.json) (`54,568 ms`):
+Latest run recorded in [`docs/benchmarks/latest-qa-report.json`](./docs/benchmarks/latest-qa-report.json) (`54,066 ms`):
 - **Portrait FPS (`390×844`)**: `12` active HUD elements audited -> **`overlaps: []`**, **`oob: []`**, zero lock prompt leaks, `#t-assist-btn` live toggle verified.
 - **Landscape FPS (`844×390`)**: `is-landscape` active -> `12` elements audited -> **`overlaps: []`**, **`oob: []`**.
 - **Tabletop 1P & 2P (`390×844` -> `844×390` -> `1280×800`)**: `11` 3D-projected node buttons clamped dynamically -> **`markerCollisions: 0`**, `#tt-handoff` triggers smooth **`3.142 rad` (`180°`)** target camera flip, debrief preserves tabletop title, exit cleans `tabletop-board` children to **`0`**.
