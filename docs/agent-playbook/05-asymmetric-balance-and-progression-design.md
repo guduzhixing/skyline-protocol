@@ -1,32 +1,39 @@
-# Playbook 05: Asymmetric Offense vs. Defense Rebalance & Perpetual Progression
+# Agent 工程剧本 05：非对称攻防数值平衡与三层长效成长设计
 
-**Originating Problem**: In early prototypes (V1), Defenders could spam unlimited infinite-HP turrets and trivially camp all waves, while Attackers suffered unfair attrition against turrets and stalled after clearing once with zero replay incentive.
-
----
-
-## 1. Asymmetric Co-Op / Defense Tuning (`src/core/engine-base.html`)
-
-Instead of giving Attackers and Defenders symmetric stats (which feels flat), tune counter-play levers explicitly inside `c` (`mM(i)`):
-
-| Parameter / Mechanic | V1 Unbalanced Bottleneck | V2 / V3 Verified Balance |
-| --- | --- | --- |
-| **Defender Turrets (`[G]`)** | Unlimited placement + infinite duration | `turretsMax: 2`, finite `115 HP`, `42s` operational lifetime (`turretsLeft: 2`) |
-| **Wave Escalation** | Flat enemy spawns | **`4` multi-lane assault waves + `2` bosses** (`defTotalWaves: 4`, `defWaveT: 3`) |
-| **Attacker EMP Overload (`[Q]`)** | Short stun window against static turret nests | Extended **11s EMP overload** (`qMax: 11` for Assault, `14` for Defense) disabling defensive turrets & stunning hostiles |
-| **Attacker `[G]` Wingman** | None | Autonomous tactical wingman (`wingmen`) providing suppression fire during assault breaches |
+**适用场景**：在双阵营（攻方破袭 vs 守方阻击）或双模态（FPS 即时射击 vs 回合战棋）玩法中，如何防止守方炮塔无限固守变成枯燥站桩，同时让单局胜利变成“可循环挑战的生涯成长闭环”。
 
 ---
 
-## 2. Three-Layer Progression & Replayability Loop
+## 1. 从 V1 “永久站点炮台”到 V2/V3 “限时有限耐久对抗”的重构
 
-Every single combat action in both FPS and Tabletop modes feeds unified career progression persisted under **`localStorage["skyline.career.v2"]`**:
+在最初原型中，不限寿命的高血量自动炮台让守方玩家只需要躲在掩体后即可轻易通吃波次，导致游戏紧张感迅速下降。V2/V3 通过引入明确的资源消耗窗口与节奏强迫点重构平衡：
 
-1. **Tactical Decay Combo (`7.5s` window)**:
-   - Kills and objective completions increment multiplier `c.combo` (`x1.0 ~ x4.0`) with live UI decay ratio (`c.comboT / 7.5`).
-   - Encourages decisive movement between relays instead of passive peeking.
-2. **8-Rank Military Ladder (`RANKS`)**:
-   - `列兵 (0)` -> `下士 (800)` -> `中士 (2,000)` -> `少尉 (4,000)` -> `上尉 (7,000)` -> `少校 (11,500)` -> `上校 (17,500)` -> `将星 (25,000)`.
-3. **10 Achievement Medals (`MEDALS`)**:
-   - `8` core FPS combat/objective medals (`first_blood`, `weak_master`, `neural_ace`, `combo_king`, `sabotage_pro`, `iron_bastion`, plus progression medals) + **`2` Tabletop Wargame medals** (`table_master`, `table_grand`).
-4. **Tier +1 Infinite Scaling Ladder (`[data-act="nexttier"]`)**:
-   - Clearing a mission never hits a dead end: pressing **晋升下一阶梯** advances `i.tier = (i.tier || 1) + 1`, updating Mission codes (`B4·攻·T2` / `D7·守·T2`) and rewarding sustained mastery (`tier_ascend`).
+| 平衡维度 | V1 初始原型问题 | V2 / V3 实装重构指标 | 设计意图 |
+| :--- | :--- | :--- | :--- |
+| **守方自动炮塔数量** | 数量过于宽松，形成绝对火力网 | **`turretsMax: 2`**（上限封顶 2 台） | 强迫守方亲自走位补枪与转点护航中继 |
+| **炮塔单台耐久与寿命** | 近乎无限续存，缺乏紧迫感 | **`115 HP` 耐久 + `42 s` 存在寿命** | 到期自然报废或被集火摧毁，必须规划布置时机 |
+| **进攻节奏与首领压迫** | 杂兵分散推进，高潮不足 | **`4` 波分路协同进攻 + `2` 名重型首领** | 在第 2 与末波形成明确战局压力峰值 |
+| **攻方破局核武器** | 缺少压制守方工事手段 | **`11 s` 超长 EMP 过载瘫痪 + `[G]` 自动突击僚机** | 给攻方创造 11 秒强冲切断中继或强杀炮台的窗口期 |
+
+---
+
+## 2. 战棋模式（`i.tabletop`）的镜像资源平衡公式
+
+在 [src/modules/tabletop-engine.js](../../src/modules/tabletop-engine.js) 的 11 节点沙盘中，攻守不对称通过**“机动奇袭 + 断链目标 vs 高血防卫 + 炮塔控场”**落地：
+- **兵种差分化属性**：
+  - 攻方突击队（`a1` `120 HP / 42 DMG / 射程 2`、`a2` 游骑 `95 HP / 34 DMG / 3 格机动`、`a3` 无人机 `80 HP / 30 DMG / 射程 3`）。
+  - 守方防卫队（`d1` 重甲队长 `135 HP / 40 DMG / 射程 2`、`d2` 猎犬 `95 HP`、`d3` 防卫无人机 `85 HP`）。
+- **AP 行动力经济循环**：每轮基础 `4 AP`，每占领 `1` 座 `supply` 节点额外 `+1 AP`；高爆发战术卡消耗 `2 AP` 且带冷却节拍（如 `EMP` 造成全场敌方 `-25 HP + 下回合眩晕`、`BC22+` 为己方单兵回血 `+50 HP`）。
+- **四重胜负终点分流**：全歼敌军、6 轮坚守期满、或攻方切断 `≥ 2` 处中继且主将抵达 `ext` 撤离点。
+
+---
+
+## 3. 三层长效生涯与永续挑战架构（`skyline.career.v2`）
+
+单局通关不应该只是弹出“游戏结束”然后刷新重来。系统在本地持久化键 `CAREER_KEY = "skyline.career.v2"` 中构建了跨模式共享的三层激励闭环：
+
+1. **短周期爽感反馈（`7.5 s` 连击衰减）**：无论是在 FPS 连续点杀无人机，还是在战棋中连环炮击破网，均叠加实时连击倍率窗口，维持高频肾上腺素刺激。
+2. **中长期荣誉收集（`8` 阶军衔 `RANKS` + `10` 枚解锁勋章 `MEDALS`）**：
+   - 将 FPS 与战棋生涯得分统一汇入 `career.totalScore` 推进 8 阶军衔晋升。
+   - V3 在原有勋章基础上扩展 `table_master`（《沙盘运筹》`+350`）与 `table_grand`（《桌面棋圣》`+450`）共 **10 枚勋章**，鼓励玩家双栖体验。
+3. **终局无尽难度阶梯（`Tier + 1`）**：通关界面提供直接晋升下一阶 `Tier`（如 `Tier 2+` 并解锁 `tier_ascend` 勋章）按钮，实现无后端成本的无限重玩价值。
