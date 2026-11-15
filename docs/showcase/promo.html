@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%23070b12'/><path d='M16 4l10 18H6z' fill='%23f59e0b'/></svg>" />
+  <title>《苍穹防线：零号协议》15秒实机宣传片 · Skyline Protocol Promo</title>
+  <style>
+    :root {
+      --bg: #070b12;
+      --panel: rgba(15, 23, 36, 0.86);
+      --border: rgba(56, 189, 248, 0.24);
+      --amber: #f59e0b;
+      --cyan: #38bdf8;
+      --text: #f1f5f9;
+      --muted: #94a3b8;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      min-height: 100vh;
+      background:
+        radial-gradient(circle at 15% 15%, rgba(245, 158, 11, 0.14), transparent 40%),
+        radial-gradient(circle at 85% 20%, rgba(56, 189, 248, 0.14), transparent 45%),
+        var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+      padding: 28px 18px 48px;
+      line-height: 1.55;
+    }
+    .wrap {
+      max-width: 1080px;
+      margin: 0 auto;
+    }
+    header {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      margin-bottom: 18px;
+    }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--amber);
+      border: 1px solid rgba(245, 158, 11, 0.4);
+      background: rgba(245, 158, 11, 0.1);
+      padding: 4px 12px;
+      border-radius: 999px;
+      margin-bottom: 8px;
+    }
+    h1 {
+      font-size: clamp(22px, 3vw, 32px);
+      font-weight: 800;
+      letter-spacing: 0.02em;
+    }
+    .subtitle {
+      color: var(--muted);
+      font-size: 14px;
+      margin-top: 4px;
+    }
+    .cta-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 18px;
+      border-radius: 10px;
+      font-size: 14px;
+      font-weight: 600;
+      text-decoration: none;
+      cursor: pointer;
+      border: 1px solid transparent;
+      transition: transform 0.15s ease, filter 0.15s ease, border-color 0.15s ease;
+    }
+    .btn:hover { transform: translateY(-1px); filter: brightness(1.08); }
+    .btn-primary {
+      background: linear-gradient(135deg, #f59e0b, #ea580c);
+      color: #0b0f17;
+    }
+    .btn-secondary {
+      background: rgba(56, 189, 248, 0.12);
+      border-color: rgba(56, 189, 248, 0.35);
+      color: #e0f2fe;
+    }
+    .btn-ghost {
+      background: rgba(148, 163, 184, 0.1);
+      border-color: rgba(148, 163, 184, 0.25);
+      color: var(--text);
+    }
+    .player-card {
+      position: relative;
+      background: #020409;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 24px 64px rgba(0, 0, 0, 0.65);
+    }
+    video {
+      display: block;
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      background: #000;
+    }
+    .sound-banner {
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      z-index: 5;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 14px;
+      border-radius: 999px;
+      border: 1px solid rgba(245, 158, 11, 0.65);
+      background: rgba(7, 11, 18, 0.85);
+      backdrop-filter: blur(8px);
+      color: #fef3c7;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .sound-banner.hidden {
+      display: none;
+    }
+    .specs {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px 18px;
+      padding: 12px 18px;
+      background: rgba(11, 18, 30, 0.92);
+      border-top: 1px solid rgba(148, 163, 184, 0.15);
+      font-size: 12.5px;
+      color: var(--muted);
+    }
+    .spec-items {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px 20px;
+    }
+    .sound-inline {
+      padding: 5px 12px;
+      border-radius: 999px;
+      border: 1px solid rgba(56, 189, 248, 0.4);
+      background: rgba(56, 189, 248, 0.12);
+      color: #e0f2fe;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .specs strong { color: var(--text); }
+    .chapters-title {
+      margin: 22px 0 10px;
+      font-size: 15px;
+      font-weight: 700;
+      color: #cbd5e1;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .chapters {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(165px, 1fr));
+      gap: 10px;
+    }
+    .shot {
+      text-align: left;
+      padding: 12px 13px;
+      border-radius: 12px;
+      border: 1px solid rgba(148, 163, 184, 0.18);
+      background: var(--panel);
+      color: var(--text);
+      cursor: pointer;
+      transition: border-color 0.15s ease, background 0.15s ease, transform 0.15s ease;
+    }
+    .shot:hover {
+      border-color: rgba(56, 189, 248, 0.5);
+      transform: translateY(-1px);
+    }
+    .shot.active {
+      border-color: var(--amber);
+      background: rgba(245, 158, 11, 0.12);
+    }
+    .shot-time {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 12px;
+      color: var(--cyan);
+      margin-bottom: 4px;
+    }
+    .shot.active .shot-time { color: var(--amber); }
+    .shot-name {
+      font-size: 13.5px;
+      font-weight: 700;
+      margin-bottom: 3px;
+    }
+    .shot-desc {
+      font-size: 12px;
+      color: var(--muted);
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div>
+        <div class="badge">SKYLINE PROTOCOL // 15s LIVE BROWSER CAPTURE</div>
+        <h1>《苍穹防线：零号协议》15 秒实机宣传片</h1>
+        <p class="subtitle">100% 网页端 Chromium WebGL 实机录屏 + 原生 WebAudio 立体声效 · 零下载打开即战</p>
+      </div>
+      <div class="cta-row">
+        <a class="btn btn-primary" href="../../index.html">🚀 立即在线试玩</a>
+        <a class="btn btn-secondary" href="./skyline_protocol_promo_15s.mp4" download="skyline_protocol_promo_15s.mp4">⬇ 下载 1080p MP4</a>
+        <a class="btn btn-ghost" href="https://github.com/guduzhixing/skyline-protocol">📦 GitHub 仓库</a>
+      </div>
+    </header>
+
+    <div class="player-card">
+      <button id="soundToggle" class="sound-banner" type="button">🔊 点击开启游戏原声</button>
+      <video
+        id="promoVideo"
+        controls
+        autoplay
+        muted
+        loop
+        playsinline
+        preload="metadata"
+        poster="./skyline_protocol_promo_15s_poster.jpg"
+      >
+        <source src="./skyline_protocol_promo_15s.mp4" type="video/mp4" />
+        您的浏览器不支持 HTML5 视频播放，请点击上方按钮下载 MP4 观看。
+      </video>
+      <div class="specs">
+        <div class="spec-items">
+          <span>分辨率：<strong>1920 × 1080 (16:9)</strong></span>
+          <span>帧率：<strong>60 fps (900 帧)</strong></span>
+          <span>时长：<strong>15.00 s</strong></span>
+          <span>音频：<strong>AAC 48 kHz 立体声 (WebAudio 直录)</strong></span>
+          <span>码率：<strong>~22.0 Mbps (H.264 High)</strong></span>
+        </div>
+        <button id="soundInlineToggle" class="sound-inline" type="button">🔊 开启原声</button>
+      </div>
+    </div>
+
+    <div class="chapters-title">🎬 分镜时间轴速览（点击任意卡片跳转对应实机片段）</div>
+    <div class="chapters" id="chapters">
+      <button class="shot active" type="button" data-start="0.00" data-end="2.12">
+        <div class="shot-time">S1 · 0.00s – 2.12s</div>
+        <div class="shot-name">主标题 & 拔枪出击</div>
+        <div class="shot-desc">单 HTML 即点即玩开场与 32m 火箭发射塔首秀</div>
+      </button>
+      <button class="shot" type="button" data-start="2.12" data-end="4.72">
+        <div class="shot-time">S2 · 2.12s – 4.72s</div>
+        <div class="shot-name">东海港区暴雨交火</div>
+        <div class="shot-desc">斜拉巨桥、撤离舰背景激战，解锁「首战告捷」</div>
+      </button>
+      <button class="shot" type="button" data-start="4.72" data-end="7.26">
+        <div class="shot-time">S3 · 4.72s – 7.26s</div>
+        <div class="shot-name">[G] 僚机 × [V] 无人机接管</div>
+        <div class="shot-desc">神眸双目僚机部署 + 沙隼无人机高空俯瞰倾转旋翼机</div>
+      </button>
+      <button class="shot" type="button" data-start="7.26" data-end="9.90">
+        <div class="shot-time">S4 · 7.26s – 9.90s</div>
+        <div class="shot-name">[Q] 22m EMP 超载清屏</div>
+        <div class="shot-desc">青色电磁波横扫战场 + 神眸 3D 全息展板同框</div>
+      </button>
+      <button class="shot" type="button" data-start="9.90" data-end="12.34">
+        <div class="shot-time">S5 · 9.90s – 12.34s</div>
+        <div class="shot-name">Boss 决战 · 弑神先锋</div>
+        <div class="shot-desc">开镜击破「荒漠重装赤狼」首领并定格爆破勋章</div>
+      </button>
+      <button class="shot" type="button" data-start="12.34" data-end="15.01">
+        <div class="shot-time">S6 · 12.34s – 15.00s</div>
+        <div class="shot-name">品牌战略护航终卡</div>
+        <div class="shot-desc">双引擎协同研发 × CINMOORE 神眸 × SuperACME</div>
+      </button>
+    </div>
+  </div>
+
+  <script>
+    const video = document.getElementById('promoVideo');
+    const soundBtn = document.getElementById('soundToggle');
+    const soundInlineBtn = document.getElementById('soundInlineToggle');
+    const shots = Array.from(document.querySelectorAll('.shot'));
+
+    function syncSoundBtn() {
+      if (video.muted) {
+        soundBtn.classList.remove('hidden');
+        soundInlineBtn.textContent = '🔊 开启原声';
+      } else {
+        soundBtn.classList.add('hidden');
+        soundInlineBtn.textContent = '🔈 原声已开启（点击静音）';
+      }
+    }
+
+    function toggleMute() {
+      video.muted = !video.muted;
+      if (!video.muted && video.paused) video.play();
+      syncSoundBtn();
+    }
+
+    soundBtn.addEventListener('click', toggleMute);
+    soundInlineBtn.addEventListener('click', toggleMute);
+
+    video.addEventListener('volumechange', syncSoundBtn);
+
+    shots.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const t = parseFloat(btn.dataset.start || '0');
+        video.currentTime = t;
+        video.muted = false;
+        video.play().catch(() => {});
+        syncSoundBtn();
+      });
+    });
+
+    video.addEventListener('timeupdate', () => {
+      const t = video.currentTime;
+      shots.forEach((btn) => {
+        const s = parseFloat(btn.dataset.start || '0');
+        const e = parseFloat(btn.dataset.end || '15');
+        btn.classList.toggle('active', t >= s && t < e);
+      });
+    });
+  </script>
+</body>
+</html>

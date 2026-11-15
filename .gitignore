@@ -11,6 +11,7 @@ chrome_profile*/
 
 # Video renders & local scratch archives (keep binary showcase assets small)
 *.mp4
+!docs/showcase/skyline_protocol_promo_15s.mp4
 *.mov
 *.webm
 

@@ -9,7 +9,29 @@
 
 - **在线试玩（品牌展示版 / Showcase，默认构建）**：https://guduzhixing.github.io/skyline-protocol/
 - **在线试玩（100% 纯净开源版 / Pure Open Edition，零第三方商标）**：https://guduzhixing.github.io/skyline-protocol/dist/skyline-protocol-open.html
+- **15 秒实机宣传片在线放映（1080p 60fps 含原声）**：https://guduzhixing.github.io/skyline-protocol/promo.html
+- **宣传片 MP4 原片（39.85 MiB）**：[`docs/showcase/skyline_protocol_promo_15s.mp4`](docs/showcase/skyline_protocol_promo_15s.mp4)
 - **GitHub 开源仓库**：https://github.com/guduzhixing/skyline-protocol
+
+---
+
+## 15 秒实机网页端录屏宣传片（直接预览）
+
+<p align="center">
+  <a href="https://guduzhixing.github.io/skyline-protocol/promo.html" title="点击进入 GitHub Pages 放映页观看 1080p 60fps 含游戏原声高清版">
+    <img src="docs/showcase/skyline_protocol_promo_15s_preview.webp" alt="《苍穹防线：零号协议》15秒网页端实机录屏宣传片预览" width="840" />
+  </a>
+</p>
+
+<p align="center">
+  <a href="https://guduzhixing.github.io/skyline-protocol/promo.html"><strong>▶ 在线观看 1080p 60fps 有声高清版（GitHub Pages 放映页）</strong></a>
+  &nbsp;·&nbsp;
+  <a href="docs/showcase/skyline_protocol_promo_15s.mp4"><strong>⬇ 查看 / 下载原片 MP4（39.85 MiB）</strong></a>
+  &nbsp;·&nbsp;
+  <a href="https://guduzhixing.github.io/skyline-protocol/"><strong>🚀 浏览器零下载立即试玩</strong></a>
+</p>
+
+> 实机参数：`1920 × 1080` · `60 fps` · `15.00 s`（900 帧）· AAC `48 kHz` 立体声（Chromium WebGL `q=ultra` 标签页实机画面与原生 WebAudio 直录）。涵盖：主标题出击 → 东海港区暴雨交火 → `[G]` 僚机与 `[V]` 无人机神经接管 → `[Q]` 22m EMP 超载清屏 → 荒漠重装赤狼 Boss 决战与品牌终卡。
 
 ---
 
@@ -113,7 +135,7 @@ skyline-protocol/
     ├── benchmarks/
     │   ├── DATA_AND_BENCHMARKS.md                 # 构建体积演变、QA 时序基准与数值参数汇总
     │   └── latest-qa-report.json                  # 最近一次实测 5 矩阵 Chrome CDP QA 完整 JSON 遥测
-    ├── showcase/                                  # 实测视觉回归高清截图（8 张）
+    ├── showcase/                                  # 实测视觉回归高清截图（8 张）与 15 秒实机宣传片（MP4 / WebP / promo.html）
     └── agent-playbook/                            # 面向 AI Agent 与人类开发者的 6 篇实战工程剧本
         ├── 01-slot-overlay-assembler-vs-naive-splitting.md
         ├── 02-mobile-4quadrant-hud-and-ghost-pointer-traps.md

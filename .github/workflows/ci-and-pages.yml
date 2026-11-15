@@ -69,10 +69,15 @@ jobs:
 
       - name: Prepare static Pages bundle
         run: |
-          mkdir -p _site/dist
+          mkdir -p _site/dist _site/docs/showcase
           cp index.html _site/index.html
           cp dist/skyline-protocol-open.html _site/dist/skyline-protocol-open.html
           cp dist/skyline-protocol-standalone.html _site/dist/skyline-protocol-standalone.html
+          cp docs/showcase/promo.html _site/docs/showcase/promo.html
+          cp docs/showcase/skyline_protocol_promo_15s.mp4 _site/docs/showcase/skyline_protocol_promo_15s.mp4
+          cp docs/showcase/skyline_protocol_promo_15s_poster.jpg _site/docs/showcase/skyline_protocol_promo_15s_poster.jpg
+          cp docs/showcase/skyline_protocol_promo_15s_preview.webp _site/docs/showcase/skyline_protocol_promo_15s_preview.webp
+          printf '<!doctype html><meta charset="utf-8"><meta http-equiv="refresh" content="0;url=./docs/showcase/promo.html"><title>Skyline Protocol 15s Promo</title><a href="./docs/showcase/promo.html">Watch 15s Promo Video</a>\n' > _site/promo.html
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
