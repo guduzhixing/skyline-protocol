@@ -1,0 +1,225 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%23070b12'/><path d='M16 4l10 18H6z' fill='%2338e8ff'/></svg>" />
+  <title>《苍穹防线：零号协议》V3.1 单机单文件发布中心 · Skyline Protocol</title>
+  <style>
+    :root {
+      --bg: #070b12;
+      --panel: rgba(13, 21, 34, 0.88);
+      --border: rgba(56, 232, 255, 0.24);
+      --cyan: #38e8ff;
+      --amber: #ffb84d;
+      --green: #62e696;
+      --text: #eef4fa;
+      --muted: #96abc0;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      min-height: 100vh;
+      background:
+        radial-gradient(circle at 12% 14%, rgba(56, 232, 255, 0.14), transparent 42%),
+        radial-gradient(circle at 88% 18%, rgba(255, 184, 77, 0.14), transparent 46%),
+        var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+      padding: 28px 18px 56px;
+      line-height: 1.55;
+    }
+    .wrap { max-width: 1040px; margin: 0 auto; }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 4px 12px;
+      border-radius: 999px;
+      border: 1px solid rgba(56, 232, 255, 0.42);
+      background: rgba(56, 232, 255, 0.1);
+      color: var(--cyan);
+      font-size: 12px;
+      letter-spacing: 0.08em;
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+    header {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+    h1 { font-size: clamp(24px, 3.4vw, 36px); font-weight: 800; letter-spacing: 0.02em; }
+    .sub { color: var(--muted); font-size: 14.5px; margin-top: 6px; max-width: 680px; }
+    .nav-row { display: flex; flex-wrap: wrap; gap: 10px; }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      padding: 10px 16px;
+      border-radius: 10px;
+      font-size: 14px;
+      font-weight: 700;
+      text-decoration: none;
+      border: 1px solid transparent;
+      cursor: pointer;
+      transition: transform 0.14s ease, filter 0.14s ease, border-color 0.14s ease;
+    }
+    .btn:hover { transform: translateY(-1px); filter: brightness(1.08); }
+    .btn-cyan { background: linear-gradient(135deg, #38e8ff, #0284c7); color: #05111b; }
+    .btn-green { background: linear-gradient(135deg, #62e696, #059669); color: #04160e; }
+    .btn-amber { background: linear-gradient(135deg, #ffb84d, #ea580c); color: #160b03; }
+    .btn-ghost { background: rgba(148, 163, 184, 0.1); border-color: rgba(148, 163, 184, 0.28); color: var(--text); }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 16px;
+      margin-bottom: 22px;
+    }
+    .card {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 14px;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.45);
+    }
+    .card.open { border-color: rgba(98, 230, 150, 0.3); }
+    .card-k { font-size: 12px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--cyan); }
+    .card.open .card-k { color: var(--green); }
+    .card h2 { font-size: 20px; margin-top: 4px; }
+    .card p { font-size: 13.5px; color: var(--muted); margin-top: 6px; }
+    .meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 10px;
+    }
+    .pill {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 11.5px;
+      padding: 3px 9px;
+      border-radius: 6px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      color: #cbd5e1;
+    }
+    .actions { display: flex; flex-wrap: wrap; gap: 10px; padding-top: 4px; }
+    .actions .btn { flex: 1 1 180px; }
+
+    .modes {
+      background: var(--panel);
+      border: 1px solid rgba(148, 163, 184, 0.2);
+      border-radius: 14px;
+      padding: 18px 20px;
+    }
+    .modes h3 { font-size: 15px; margin-bottom: 12px; color: #dbeafe; }
+    .mode-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 12px;
+    }
+    .mode-item {
+      padding: 12px 14px;
+      border-radius: 10px;
+      background: rgba(7, 11, 18, 0.65);
+      border: 1px solid rgba(148, 163, 184, 0.16);
+    }
+    .mode-item strong { display: block; font-size: 13.5px; margin-bottom: 4px; color: #f8fafc; }
+    .mode-item span { font-size: 12.5px; color: var(--muted); }
+    footer {
+      margin-top: 20px;
+      font-size: 12.5px;
+      color: var(--muted);
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 10px;
+    }
+    footer a { color: var(--cyan); text-decoration: none; }
+    footer a:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div>
+        <div class="badge">SKYLINE PROTOCOL V3.1 // ZERO-DEPENDENCY SINGLE-FILE DIST</div>
+        <h1>《苍穹防线：零号协议》单机版在线试玩中心</h1>
+        <p class="sub">无需安装客户端、无需联网后端。以下两个单文件 HTML 均内置完整 WebGL2 3D 引擎、手游触屏自瞄 HUD 与 1P/2P 面对面战棋，GitHub Pages 全球直连即开即玩。</p>
+      </div>
+      <div class="nav-row">
+        <a class="btn btn-amber" href="../promo.html">🎬 15s 实机宣传片</a>
+        <a class="btn btn-ghost" href="../index.html">🏠 主站默认入口</a>
+        <a class="btn btn-ghost" href="https://github.com/guduzhixing/skyline-protocol">📦 GitHub 源码</a>
+      </div>
+    </header>
+
+    <div class="grid">
+      <section class="card">
+        <div>
+          <div class="card-k">EDITION 01 · DEFAULT SHOWCASE BUILD</div>
+          <h2>V3.1 Showcase 完整展示版（单文件）</h2>
+          <p>默认托管主版本（与站根目录首页同源）。含完整东海海空与赤沙航天港双战区、手机竖/横屏四象限触屏 HUD、1P/2P 战棋及 3D 立体展示品牌看板与硬件装备映射。</p>
+          <div class="meta">
+            <span class="pill">skyline-protocol-standalone.html</span>
+            <span class="pill">~1.57 MiB 单文件</span>
+            <span class="pill">CDP 5/5 QA 通过</span>
+          </div>
+        </div>
+        <div class="actions">
+          <a class="btn btn-cyan" href="./skyline-protocol-standalone.html">🚀 立即在线试玩</a>
+          <a class="btn btn-ghost" href="./skyline-protocol-standalone.html" download="skyline-protocol-standalone.html">⬇ 下载单文件离线玩</a>
+        </div>
+      </section>
+
+      <section class="card open">
+        <div>
+          <div class="card-k">EDITION 02 · 100% MIT PURE OPEN BUILD</div>
+          <h2>V3.1 Pure 纯净开源版（零第三方商标）</h2>
+          <p>专为开源社区学习、Fork 二次开发与纯净离线分发打造。玩法、音效、3D 关卡与战棋机制完全对等，所有品牌文字与贴图已自动替换为 MIT 内联矢量 SVG。</p>
+          <div class="meta">
+            <span class="pill">skyline-protocol-open.html</span>
+            <span class="pill">~1.50 MiB 单文件</span>
+            <span class="pill">MIT Clean · 0 商标残留</span>
+          </div>
+        </div>
+        <div class="actions">
+          <a class="btn btn-green" href="./skyline-protocol-open.html">🛡️ 立即在线试玩（纯净版）</a>
+          <a class="btn btn-ghost" href="./skyline-protocol-open.html" download="skyline-protocol-open.html">⬇ 下载开源版离线玩</a>
+        </div>
+      </section>
+    </div>
+
+    <section class="modes">
+      <h3>🕹️ 打开即玩三大核心玩法（手机 / 平板 / 桌面全终端自适应）</h3>
+      <div class="mode-list">
+        <div class="mode-item">
+          <strong>🎯 3D 第一人称防空突击 / 守卫（FPS）</strong>
+          <span>桌面端键鼠全视角锁定，手机端自动启用四象限防误触虚拟双摇杆、圆锥磁吸自瞄与一键自动开火切换。</span>
+        </div>
+        <div class="mode-item">
+          <strong>♟️ 1P 苍穹沙盘（3D 回合制兵棋）</strong>
+          <span>直接在实景 3D 地形上方部署 11 节点连通防线，消耗 AP 行动力调兵、切断或修复核心中继并释放战术指令卡。</span>
+        </div>
+        <div class="mode-item">
+          <strong>🤝 2P 双人同桌面对面战棋（Pass &amp; Play）</strong>
+          <span>把手机平放桌面轮流操作！交接时弹出防偷窥遮罩，点击接手后沙盘自动平滑翻转 180° 正对下一位指挥官。</span>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      <span>引擎代码 &amp; 工程剧本采用 <a href="https://github.com/guduzhixing/skyline-protocol/blob/main/LICENSE">MIT License</a> 开源。</span>
+      <span>本地构建命令：<code>npm run build:all &amp;&amp; npm run check &amp;&amp; npm run qa</code></span>
+    </footer>
+  </div>
+</body>
+</html>

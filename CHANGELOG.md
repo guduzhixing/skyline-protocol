@@ -8,7 +8,7 @@
 
 ### 新增与工程化重构（Added & Modularized）
 - **仓库开源架构与槽位组装构建管线**：将单一单文件拆分为 `src/core/engine-base.html` + `src/styles/` + `src/modules/` + `src/presets/`，推出零外部依赖组装器 [scripts/build.mjs](scripts/build.mjs)。
-- **双预设合规构建体系**：支持 `--mode=showcase`（输出 `index.html` 与 `dist/skyline-protocol-standalone.html`，体积 `1,642,122 B`）与 `--mode=pure`（依据 [open-neutral.json](src/presets/open-neutral.json) 输出零第三方商标的 `dist/skyline-protocol-open.html`，体积 `1,572,207 B`）。
+- **双预设合规构建体系**：支持 `--mode=showcase`（输出 `index.html` 与 `dist/skyline-protocol-standalone.html`，体积 `1,642,502 B`）与 `--mode=pure`（依据 [open-neutral.json](src/presets/open-neutral.json) 输出零第三方商标的 `dist/skyline-protocol-open.html`，体积 `1,572,587 B`），并新增 [dist/index.html](dist/index.html) 单机发行中心入口页。
 - **完整 QA 与 CI/CD 基础设施**：新增 `scripts/verify-build.mjs`、5 矩阵 Chrome CDP 自动化审计套件 [run-4matrix-qa.mjs](scripts/cdp-qa/run-4matrix-qa.mjs) / [layout-audit.mjs](scripts/cdp-qa/layout-audit.mjs)，以及 GitHub Actions CI + GitHub Pages 自动部署流水线。
 - **Agent 工程手册与系统文档**：整理并发布 [AGENTS.md](AGENTS.md)、[CLAUDE.md](CLAUDE.md)、[docs/OPEN_SOURCE_STRATEGY.md](docs/OPEN_SOURCE_STRATEGY.md)、架构文档与 `01–06` 号实战 Playbook。
 

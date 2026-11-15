@@ -52,9 +52,9 @@ const oob = rects.filter(r => r.left < -1 || r.top < -1 || r.right > innerWidth 
 
 ## 4. 本项目落地的 5 矩阵全量自动化防线
 
-运行 `npm run qa`（实测总耗时 `52,526 ms`，详见 [latest-qa-report.json](../benchmarks/latest-qa-report.json)）依次自动验证：
+运行 `npm run qa`（实测总耗时 `51,573 ms`，详见 [latest-qa-report.json](../benchmarks/latest-qa-report.json)）依次自动验证：
 1. **手机竖屏 `390×844`**：触屏仿真下 `DEPLOY` 按钮全进首屏、12 控件零重叠、点击滑屏不触发鼠标锁定提示、一键自动开火开关可切。
 2. **手机横屏 `844×390`**：挂载 `is-touch` + `is-landscape`、左右拇指安全区 12 控件零重叠。
-3. **3D 战棋 1P / 2P 传玩**：11 节点生成、安全走廊零碰撞（`markerCollisions: 0`）、2P 换手遮罩触发后目标 `3.142 rad`（实测 `3.117 rad`）旋转及退出零 DOM 残留。
+3. **3D 战棋 1P / 2P 传玩**：11 节点生成、安全走廊零碰撞（`markerCollisions: 0`）、2P 换手遮罩触发后目标 `3.142 rad`（实测 `3.043 rad`）旋转及退出零 DOM 残留。
 4. **桌面端 `1440×900` 回归**：`isTouchClass: false`、`billboardsAfterDeploy: 3`、FPS 模式正常启动。
-5. **Pure 纯净版启动验收**：加载 [dist/skyline-protocol-open.html](../../dist/skyline-protocol-open.html)，验证 `fatal: null` 且页面 DOM 专有品牌残留 `brandHitsInDOM: 0`。
+5. **Pure 纯净版与 `/dist/` 门户启动验收**：加载 [dist/skyline-protocol-open.html](../../dist/skyline-protocol-open.html) 与 [dist/index.html](../../dist/index.html)，验证 `fatal: null` 且页面 DOM 专有品牌残留 `brandHitsInDOM: 0`。

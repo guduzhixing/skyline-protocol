@@ -8,7 +8,9 @@
 [![Three.js](https://img.shields.io/badge/WebGL2-Three.js%20r180-ffb84d.svg)](THIRD_PARTY_NOTICES.md)
 
 - **在线试玩（品牌展示版 / Showcase，默认构建）**：https://guduzhixing.github.io/skyline-protocol/
-- **在线试玩（100% 纯净开源版 / Pure Open Edition，零第三方商标）**：https://guduzhixing.github.io/skyline-protocol/dist/skyline-protocol-open.html
+- **`dist/` 单机版在线试玩与发行中心（展示版 + 纯净开源版 + 离线下载）**：https://guduzhixing.github.io/skyline-protocol/dist/
+- **展示版独立单文件直玩**：https://guduzhixing.github.io/skyline-protocol/dist/skyline-protocol-standalone.html
+- **100% 纯净开源版直玩（Pure Open Edition，零第三方商标）**：https://guduzhixing.github.io/skyline-protocol/dist/skyline-protocol-open.html
 - **15 秒实机宣传片在线放映（1080p 60fps 含原声）**：https://guduzhixing.github.io/skyline-protocol/promo.html
 - **宣传片 MP4 原片（39.85 MiB）**：[`docs/showcase/skyline_protocol_promo_15s.mp4`](docs/showcase/skyline_protocol_promo_15s.mp4)
 - **GitHub 开源仓库**：https://github.com/guduzhixing/skyline-protocol
@@ -94,7 +96,7 @@ npm run qa
 
 ```text
 skyline-protocol/
-├── index.html                                     # GitHub Pages 入口（展示版单文件 HTML，1,642,122 B）
+├── index.html                                     # GitHub Pages 入口（展示版单文件 HTML，1,642,502 B）
 ├── package.json                                   # 工程脚本清单（type: "module"，零第三方依赖）
 ├── LICENSE                                        # MIT 开源许可证原文
 ├── AGENTS.md                                      # AI Agent 核心架构契约与不可破坏不变量
@@ -108,7 +110,7 @@ skyline-protocol/
 │   ├── core/
 │   │   └── engine-base.html                       # 经验证的 V2 核心 WebGL2/Three.js 单闭包基线引擎（1,590,585 B）
 │   ├── styles/
-│   │   ├── mobile-responsive.css                  # 移动端 4 象限响应式 HUD 与幽灵点击屏蔽样式（12,811 B）
+│   │   ├── mobile-responsive.css                  # 移动端 4 象限响应式 HUD 与幽灵点击屏蔽样式（13,191 B）
 │   │   └── tabletop-ui.css                        # 3D 战棋顶栏/底栏、兵棋悬浮节点与 2P 交接界面样式（5,929 B）
 │   ├── modules/
 │   │   ├── mobile-input-aim.js                    # 触屏自适应、双摇杆、圆锥辅助瞄准与自动开火槽位补丁（10,359 B）
@@ -118,8 +120,9 @@ skyline-protocol/
 │       └── open-neutral.json                      # 纯净开源版内联 SVG 与中性战术名词替换清单（4,704 B）
 ├── assets/presets/superacme/                      # 展示版 PNG 贴图原件（3,642 B ~ 13,595 B）
 ├── dist/
-│   ├── skyline-protocol-standalone.html           # 独立分发展示版（1,642,122 B）
-│   └── skyline-protocol-open.html                 # 100% 开源合规纯净版（1,572,207 B）
+│   ├── index.html                                 # GitHub Pages `/dist/` 单机发行中心在线启动页（9,400 B）
+│   ├── skyline-protocol-standalone.html           # 独立分发展示版（1,642,502 B）
+│   └── skyline-protocol-open.html                 # 100% 开源合规纯净版（1,572,587 B）
 ├── scripts/
 │   ├── build.mjs                                  # 槽位叠加构建器（--mode=showcase | --mode=pure）
 │   ├── dev-server.mjs                             # 本地 HTTP 预览服务
@@ -154,20 +157,20 @@ skyline-protocol/
 | **Agent 必读契约** | [AGENTS.md](AGENTS.md) / [CLAUDE.md](CLAUDE.md) | 引擎关键压缩符号表、6 条不可破坏工程不变量与标准验收流程 |
 | **开源全景战略** | [docs/OPEN_SOURCE_STRATEGY.md](docs/OPEN_SOURCE_STRATEGY.md) | 大众价值、个人复利、双预设版权隔离机制与三阶段路线图 |
 | **系统架构与二次开发** | [ENGINE_SUBSYSTEMS.md](docs/architecture/ENGINE_SUBSYSTEMS.md) · [CUSTOMIZATION_GUIDE.md](docs/architecture/CUSTOMIZATION_GUIDE.md) | 槽位构建原理、5 态机与战棋引擎交互、地图/预设/战术卡修改手册 |
-| **基准测试与遥测** | [DATA_AND_BENCHMARKS.md](docs/benchmarks/DATA_AND_BENCHMARKS.md) · [latest-qa-report.json](docs/benchmarks/latest-qa-report.json) | 5 矩阵实测数据（最近一次全量通过耗时 `52,526 ms`、零运行时异常、零 HUD 重叠） |
+| **基准测试与遥测** | [DATA_AND_BENCHMARKS.md](docs/benchmarks/DATA_AND_BENCHMARKS.md) · [latest-qa-report.json](docs/benchmarks/latest-qa-report.json) | 5 矩阵实测数据（最近一次全量通过耗时 `51,573 ms`、零运行时异常、零 HUD 重叠） |
 | **Agent 工程剧本 01–06** | `docs/agent-playbook/01..06` | 闭包叠加器、手机四象限 HUD 与幽灵点击修复、FPS/战棋同源共享、CDP 自动化、非对称数值、多 Agent 协同 |
 
 ---
 
 ## 自动化 QA 验证摘要（最近一次完整实测）
 
-来自 [docs/benchmarks/latest-qa-report.json](docs/benchmarks/latest-qa-report.json)（执行时间：`2026-11-14T16:33:56.279Z`，总耗时 `52,526 ms`，运行时报错 `0`）：
+来自 [docs/benchmarks/latest-qa-report.json](docs/benchmarks/latest-qa-report.json)（执行时间：`2026-11-15T01:46:30.188Z`，总耗时 `51,573 ms`，运行时报错 `0`）：
 
 - **矩阵 A（手机竖屏 `390×844`）**：`12` 个 HUD 元素零重叠（`overlaps: []`）、零越界（`oob: []`），`DEPLOY` 主按钮居中无遮挡（`top: 385, bottom: 429`），3 枚模式胶囊切换正常，无误触桌面指针锁定提示（`hasLockPrompt: false`），`自动开火:开` ↔ `仅手控:关` 切换正常。
 - **矩阵 B（手机横屏 `844×390`）**：挂载 `["is-touch", "is-landscape"]`，12 个 HUD 控件分布于两侧拇指安全区，零重叠、零越界。
-- **矩阵 C（3D 战棋 1P / 2P 传玩）**：竖屏 11 节点棋盘安全区投影零碰撞（`markerCollisions: 0`）；横屏 2P 传玩触发交接遮罩，确认换手后相机平稳完成目标 `3.142 rad`（实测 `3.117 rad`）180° 翻转；退出重进后战棋 DOM 完全清理（`ttRem: 0`）。
+- **矩阵 C（3D 战棋 1P / 2P 传玩）**：竖屏 11 节点棋盘安全区投影零碰撞（`markerCollisions: 0`）；横屏 2P 传玩触发交接遮罩，确认换手后相机平稳完成目标 `3.142 rad`（实测 `3.043 rad`）180° 翻转；退出重进后战棋 DOM 完全清理（`ttRem: 0`）。
 - **矩阵 D（桌面端 `1440×900` 回归）**：未误触发触屏类（`isTouchClass: false`），全 3 块真实 3D 广告/战术牌可见（`billboardsAfterDeploy: 3`），进入正常 FPS 模式（`fpsState: "playing"`）。
-- **矩阵 E（纯净开源版引导校验）**：`dist/skyline-protocol-open.html` 零致命异常启动（`fatal: null`），DOM 第三方品牌关键词残留 `brandHitsInDOM: 0`。
+- **矩阵 E（纯净开源版与 `/dist/` 门户校验）**：`dist/skyline-protocol-open.html` 零致命异常启动（`fatal: null`），DOM 第三方品牌关键词残留 `brandHitsInDOM: 0`；`dist/index.html` 单机发行中心链接完备。
 
 ---
 

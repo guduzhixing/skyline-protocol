@@ -50,5 +50,5 @@
 
 面对面桌游核心不在界面花哨，而在**“信息防偷窥 + 方位零脑力转换”**：
 1. P1 结束回合后，系统立刻覆盖 `#tt-handoff` 遮罩阻断棋盘视角并提示“请将设备转交下一位指挥官”。
-2. P2 接过手机点击 `#tt-ho-go`（我已接手 · 开始行动）后，若开启 `tableFlip`（默认开），引擎对 `tt.camTargetYaw` 累加 **`Math.PI`**，由渲染循环平滑插值阻尼旋转至 `~3.142 rad`（CDP 实测 `yawDeltaRad: 3.117 rad`），沙盘建筑与兵棋直接正面朝向对坐玩家。
+2. P2 接过手机点击 `#tt-ho-go`（我已接手 · 开始行动）后，若开启 `tableFlip`（默认开），引擎对 `tt.camTargetYaw` 累加 **`Math.PI`**，由渲染循环平滑插值阻尼旋转至 `~3.142 rad`（CDP 实测 `yawDeltaRad: 3.043 rad`），沙盘建筑与兵棋直接正面朝向对坐玩家。
 3. 退出重开新局时 `i.tabletop.stop()` 彻底清空 `ttRoot` 与 `.ttUI.on` 类名，CDP 验证二次重开残留战棋 DOM 为 `ttRem: 0`。

@@ -470,8 +470,11 @@ kbd { display: inline-block; font: 500 10px/1 var(--f-mono); color: var(--bone);
   .m-title-side { flex: none; width: 100%; max-width: 560px; }
 }
 /* ===================================================================== V3 Mobile & Desktop Comfort Responsive Layout */
-#app { height: 100dvh; }
-#view, #tt-ui { touch-action: none; }
+html, body { overscroll-behavior: none; -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; }
+#app { height: 100dvh; -webkit-touch-callout: none; }
+#view, #tt-ui, .touch, .hud { touch-action: none; -webkit-touch-callout: none; }
+.t-stick, .t-stick-idle, .t-btn, .t-assist { -webkit-touch-callout: none; -webkit-user-select: none; user-select: none; }
+.menu[data-screen="title"] .m-title, .panel { touch-action: pan-y; }
 .tt-row { touch-action: pan-x; }
 .loc-card { pointer-events: none !important; }
 .menu.open { z-index: 20; }

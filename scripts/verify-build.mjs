@@ -77,11 +77,33 @@ function verifyHtmlFile(relPath, { pure = false } = {}) {
   };
 }
 
+function verifyStaticPages() {
+  const distIndex = path.join(ROOT, 'dist', 'index.html');
+  if (!fs.existsSync(distIndex)) {
+    throw new Error('[verify] Missing dist/index.html launcher portal');
+  }
+  const distHtml = fs.readFileSync(distIndex, 'utf8');
+  for (const href of ['./skyline-protocol-standalone.html', './skyline-protocol-open.html']) {
+    if (!distHtml.includes(href)) {
+      throw new Error(`[verify] dist/index.html missing link to ${href}`);
+    }
+  }
+  const promoPath = path.join(ROOT, 'docs', 'showcase', 'promo.html');
+  if (fs.existsSync(promoPath)) {
+    const promoHtml = fs.readFileSync(promoPath, 'utf8');
+    checkJsSyntax(extractMainScript(promoHtml, 'docs/showcase/promo.html'), 'promo');
+    if (promoHtml.includes("getElementById('soundInlineToggle')") && !promoHtml.includes('id="soundInlineToggle"')) {
+      throw new Error('[verify] docs/showcase/promo.html references #soundInlineToggle in JS without matching DOM element');
+    }
+  }
+}
+
 function main() {
   const results = [];
   results.push(verifyHtmlFile('index.html', { pure: false }));
   results.push(verifyHtmlFile('dist/skyline-protocol-standalone.html', { pure: false }));
   results.push(verifyHtmlFile('dist/skyline-protocol-open.html', { pure: true }));
+  verifyStaticPages();
 
   // Also syntax-check source JS modules directly
   for (const mod of ['src/modules/mobile-input-aim.js', 'src/modules/tabletop-engine.js', 'scripts/cdp-qa/layout-audit.mjs', 'scripts/cdp-qa/run-4matrix-qa.mjs']) {

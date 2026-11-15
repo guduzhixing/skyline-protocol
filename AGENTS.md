@@ -20,7 +20,8 @@
 | [scripts/build.mjs](scripts/build.mjs) | 零依赖精确字符串槽位叠加构建器（`replaceExact`） | 需谨慎维护锚点 |
 | [scripts/verify-build.mjs](scripts/verify-build.mjs) | 快速静态检查与内联 JS `node --check` 语法验证 | 需谨慎 |
 | [scripts/cdp-qa/run-4matrix-qa.mjs](scripts/cdp-qa/run-4matrix-qa.mjs) | 无头 Chrome CDP 5 矩阵自动化视觉与交互测试套件 | 可扩展测试用例 |
-| `index.html`, `dist/*.html` | 构建输出产物 | **禁止手改**，运行 `npm run build:all` 生成 |
+| [dist/index.html](dist/index.html) | GitHub Pages `/dist/` 单机版本在线试玩与下载中心门户页 | 可按发布版式维护 |
+| `index.html`, `dist/skyline-protocol-*.html` | 构建输出产物 | **禁止手改**，运行 `npm run build:all` 生成 |
 
 ---
 

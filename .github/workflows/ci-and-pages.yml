@@ -49,6 +49,7 @@ jobs:
           name: skyline-protocol-builds
           path: |
             index.html
+            dist/index.html
             dist/skyline-protocol-standalone.html
             dist/skyline-protocol-open.html
             docs/benchmarks/latest-qa-report.json
@@ -71,6 +72,7 @@ jobs:
         run: |
           mkdir -p _site/dist _site/docs/showcase
           cp index.html _site/index.html
+          cp dist/index.html _site/dist/index.html
           cp dist/skyline-protocol-open.html _site/dist/skyline-protocol-open.html
           cp dist/skyline-protocol-standalone.html _site/dist/skyline-protocol-standalone.html
           cp docs/showcase/promo.html _site/docs/showcase/promo.html

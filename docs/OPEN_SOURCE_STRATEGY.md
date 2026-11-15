@@ -18,7 +18,7 @@
 ## 2. 对个人与团队的长期复利（Personal Leverage）
 
 1. **零基础设施托管成本的永久作品集**
-   - 构建产物为单一静态 HTML（Showcase 版 `1,642,122 B`，Pure 纯净版 `1,572,207 B`），可零配置永久托管于 GitHub Pages（如 `https://guduzhixing.github.io/skyline-protocol/`），无需维护后端服务器或构建缓存失效问题。
+   - 构建产物为单一静态 HTML（Showcase 版 `1,642,502 B`，Pure 纯净版 `1,572,587 B`），可零配置永久托管于 GitHub Pages（`https://guduzhixing.github.io/skyline-protocol/` 与 `https://guduzhixing.github.io/skyline-protocol/dist/`），无需维护后端服务器或构建缓存失效问题。
 2. **可跨项目复制的“槽位叠加构建”资产**
    - 面对高密度 WebGL / Canvas 单闭包内核时，用 [scripts/build.mjs](../scripts/build.mjs) 的 `replaceExact` 精确锚点机制叠加模块化 CSS/JS，可复用至任意重型网页应用迭代，避免“一拆分就崩作用域”。
 3. **无外包测试的自动化质量防线**
@@ -46,7 +46,7 @@
    └───────────────┬───────────────┘                      │
                    ▼                                      ▼
     index.html & dist/skyline-              dist/skyline-protocol-open.html
-    protocol-standalone.html (1,642,122 B)  (1,572,207 B, brandHitsInDOM = 0)
+    protocol-standalone.html (1,642,502 B)  (1,572,587 B, brandHitsInDOM = 0)
 ```
 
 ---

@@ -10,6 +10,7 @@ const ROOT = path.resolve(__dirname, '..', '..');
 
 const SHOWCASE_URL = pathToFileURL(path.join(ROOT, 'index.html')).href;
 const PURE_URL = pathToFileURL(path.join(ROOT, 'dist', 'skyline-protocol-open.html')).href;
+const DIST_HUB_URL = pathToFileURL(path.join(ROOT, 'dist', 'index.html')).href;
 const REPORT_PATH = path.join(ROOT, 'docs', 'benchmarks', 'latest-qa-report.json');
 const HUD_SELECTORS = [
   '.h-obj', '#h-map', '.h-score', '.h-compass', '.t-pause', '#t-assist-btn',
@@ -261,6 +262,19 @@ async function run() {
     assert.equal(pureOpenBoot.fatal, null);
     assert.equal(pureOpenBoot.brandHitsInDOM, 0);
     report.matrices.pureOpenBoot = pureOpenBoot;
+
+    // ==================== PORTAL CHECK: DIST LAUNCHER HUB ====================
+    await cdp('Page.navigate', { url: DIST_HUB_URL });
+    await waitUntil(ev, `document.readyState === 'complete' && document.querySelectorAll('.card .btn').length >= 4`, 'dist/index.html portal render');
+    const distPortal = await ev(`(() => ({
+      title: document.title,
+      cardCount: document.querySelectorAll('.card').length,
+      links: [...document.querySelectorAll('.card a[href]')].map(a => a.getAttribute('href'))
+    }))()`);
+    assert.equal(distPortal.cardCount, 2);
+    assert.ok(distPortal.links.includes('./skyline-protocol-standalone.html'));
+    assert.ok(distPortal.links.includes('./skyline-protocol-open.html'));
+    report.matrices.distPortal = distPortal;
 
     assert.equal(runtimeErrors.length, 0, `Runtime errors detected: ${JSON.stringify(runtimeErrors)}`);
     report.runtimeErrors = runtimeErrors;

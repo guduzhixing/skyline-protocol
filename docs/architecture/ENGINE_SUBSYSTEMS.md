@@ -22,9 +22,9 @@
          │      └─ TABLETOP_PATCHES (src/modules/tabletop-engine.js: TT_MAPS、战棋核心、状态机切入、新增勋章)
          │
          └──► [Step 4] 按模式分支产出（showcase vs pure）
-                ├─ --mode=showcase ──► index.html & dist/skyline-protocol-standalone.html (1,642,122 B)
+                ├─ --mode=showcase ──► index.html & dist/skyline-protocol-standalone.html (1,642,502 B)
                 └─ --mode=pure     ──► 读取 open-neutral.json 替换 SVG + 清洗品牌词条
-                                       ──► dist/skyline-protocol-open.html (1,572,207 B)
+                                       ──► dist/skyline-protocol-open.html (1,572,587 B)
 ```
 
 ---
@@ -68,4 +68,4 @@
   - 横屏 / 桌面：使用 `baseYaw = 0.24`、`camDist = 50`（横屏）或 `44`（桌面）、`camPitch = 0.86`。
 - **屏幕安全走廊动态投影夹紧（`i.tabletop.update`）**：
   每帧将所有 11 个 3D 节点位置 `(nd.x, nd.y + 1.8, nd.z)` 通过 `project(i.camera)` 转至规范化屏幕空间后，水平夹紧在 `[46, W0 - 46]`，垂直严格测量顶栏 `.tt-top-wrap.getBoundingClientRect().bottom + 20` 与底栏 `.tt-dock.getBoundingClientRect().top - 22` 之间的安全高度并钳制，消除任何机型旋转下的 DOM 按钮遮挡（QA 强制断言 `markerCollisions: 0`）。
-- **2P 面对面 180° 平滑转盘**：回合切换且 `settings.tableFlip !== false` 时，弹出全屏交接遮罩 `#tt-handoff`，接手指挥官点击 `#tt-ho-go` 后对 `tt.camTargetYaw` 累加 `Math.PI`（实测稳定旋转约 `3.117 ~ 3.142 rad`）。
+- **2P 面对面 180° 平滑转盘**：回合切换且 `settings.tableFlip !== false` 时，弹出全屏交接遮罩 `#tt-handoff`，接手指挥官点击 `#tt-ho-go` 后对 `tt.camTargetYaw` 累加 `Math.PI`（实测稳定旋转约 `3.043 ~ 3.142 rad`）。

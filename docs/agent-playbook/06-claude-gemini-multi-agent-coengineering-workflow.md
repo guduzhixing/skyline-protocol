@@ -21,7 +21,7 @@
 
 - **Fast Loop（快循环：`< 1 s`）**：运行 `npm run build:all && npm run check`。
   - 验证所有 `replaceExact` 槽位唯一命中、抽离 `<script>` 通过 `node --check` 零语法报错、且 Pure 开源版无商标泄漏。
-- **Deep Loop（深循环：约 `50–60 s`，最近实测 `52,526 ms`）**：运行 `npm run qa`。
+- **Deep Loop（深循环：约 `50–60 s`，最近实测 `51,573 ms`）**：运行 `npm run qa`。
   - 真实拉起无头 Chrome 跑完竖屏 `390×844`、横屏 `844×390`、1P/2P 战棋翻转、桌面 `1440×900` 与 Pure 引导共 5 大矩阵。
 
 ---
