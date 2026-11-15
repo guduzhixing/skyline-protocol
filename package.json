@@ -1,6 +1,6 @@
 {
   "name": "skyline-protocol",
-  "version": "3.1.0",
+  "version": "3.2.0",
   "description": "Zero-dependency WebGL 3D FPS & 1P/2P Face-to-Face Tabletop Wargame Engine with Mobile-First HUD, Cone Aim-Assist, and AI-Agent Playbooks.",
   "type": "module",
   "license": "MIT",

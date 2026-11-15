@@ -42,7 +42,12 @@ function verifyHtmlFile(relPath, { pure = false } = {}) {
     'IS_TOUCH_DEV',
     'window.__ready',
     'east_sea_mega_bridge',
-    'skyline.career.v2'
+    'skyline.career.v2',
+    'buildBionicHoundRig',
+    'triggerPulseStrike',
+    'h-popups',
+    'h-streak',
+    'tt-popups'
   ];
   for (const anchor of requiredAnchors) {
     if (!html.includes(anchor)) {
@@ -50,7 +55,7 @@ function verifyHtmlFile(relPath, { pure = false } = {}) {
     }
   }
 
-  const forbiddenLegacy = ['几猫', 'Jimao', 'JIMAO'];
+  const forbiddenLegacy = ['几猫', 'Jimao', 'JIMAO', 'UniUbi', 'UNIUBI', 'uniubi', '宇泛', 'Cyvet', 'CYVET'];
   for (const tok of forbiddenLegacy) {
     if (html.includes(tok)) {
       throw new Error(`[verify] Legacy forbidden string "${tok}" found in ${relPath}`);

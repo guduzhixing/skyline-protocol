@@ -53,11 +53,11 @@
 
 ---
 
-## 核心截图展示（V3.1 实测）
+## 核心截图展示（V3.2 实测）
 
-| 手机竖屏大厅（390×844） | 手机竖屏 FPS 四象限 HUD | 手机横屏 FPS 自动射击 |
+| 守护方具身仿生机器狗与太阳能云台炮塔 | 手机竖屏 FPS 四象限 HUD | 手机横屏 FPS 自动射击 |
 | :---: | :---: | :---: |
-| ![手机竖屏大厅](docs/showcase/v3_mobile_portrait_title.png) | ![手机竖屏 FPS](docs/showcase/v3_mobile_portrait_fps.png) | ![手机横屏 FPS](docs/showcase/v3_mobile_landscape_fps.png) |
+| ![守护方具身仿生机器狗](docs/showcase/v3_defender_bionic_hound.png) | ![手机竖屏 FPS](docs/showcase/v3_mobile_portrait_fps.png) | ![手机横屏 FPS](docs/showcase/v3_mobile_landscape_fps.png) |
 | **1P 手机竖屏 3D 战棋** | **2P 面对面回合交接遮罩（180° 翻转）** | **桌面端东海海空 3D 战棋俯瞰** |
 | ![1P 战棋模式](docs/showcase/v3_tabletop_portrait_1p.png) | ![2P 回合交接](docs/showcase/v3_tabletop_landscape_2p_handoff.png) | ![桌面端海空战棋](docs/showcase/v3_tabletop_desktop_ocean.png) |
 
@@ -111,10 +111,11 @@ skyline-protocol/
 │   │   └── engine-base.html                       # 经验证的 V2 核心 WebGL2/Three.js 单闭包基线引擎（1,590,585 B）
 │   ├── styles/
 │   │   ├── mobile-responsive.css                  # 移动端 4 象限响应式 HUD 与幽灵点击屏蔽样式（13,191 B）
-│   │   └── tabletop-ui.css                        # 3D 战棋顶栏/底栏、兵棋悬浮节点与 2P 交接界面样式（5,929 B）
+│   │   └── tabletop-ui.css                        # 3D 战棋顶栏/底栏、兵棋悬浮节点与爽感连杀/跳字样式
 │   ├── modules/
-│   │   ├── mobile-input-aim.js                    # 触屏自适应、双摇杆、圆锥辅助瞄准与自动开火槽位补丁（10,359 B）
-│   │   └── tabletop-engine.js                     # 11 节点拓扑地图、AI 决策、AP 经济与 180° 双人翻转引擎（37,080 B）
+│   │   ├── mobile-input-aim.js                    # 触屏自适应、双摇杆、圆锥辅助瞄准与自动开火槽位补丁
+│   │   ├── tabletop-engine.js                     # 11 节点拓扑地图、3D 精细棋子、AI 决策、AP 经济与 180° 双人翻转引擎
+│   │   └── bionic-hound-and-catharsis.js          # 99 网格具身仿生机器狗、全角色升级、720° 空翻震击与五阶连杀爽感系统
 │   └── presets/
 │       ├── superacme-showcase.json                # 展示版品牌硬件预设映射配置（502 B）
 │       └── open-neutral.json                      # 纯净开源版内联 SVG 与中性战术名词替换清单（4,704 B）

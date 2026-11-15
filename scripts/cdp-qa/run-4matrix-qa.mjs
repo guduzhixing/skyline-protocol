@@ -243,6 +243,47 @@ async function run() {
     await sleep(300);
     desktopRegression.fpsState = await ev('window.__G.game.state');
     desktopRegression.billboardsAfterDeploy = await ev(`window.__G.scene?.getObjectByName('superacme-billboards')?.children.length || 0`);
+
+    // Verify Defender Bionic Guardian Hound rig, [Q]/[G]/[F] skills, neural takeover, and Catharsis HUD
+    const defenderBionicCheck = await ev(`(() => {
+      window.__G.game.switchRole('defend');
+      const run = window.__G.game.run;
+      const hound = run.allies[0];
+      let houndMeshes = 0;
+      if (hound && hound.root) hound.root.traverse(o => { if (o.isMesh) houndMeshes++; });
+      window.__G.game.triggerSkillQ();
+      window.__G.game.triggerSkillG();
+      window.__G.game.triggerPulseStrike();
+      window.__G.game.setAvatar('hound');
+      window.__G.game.setAvatar('drone');
+      window.__G.game.setAvatar('human');
+      let turretMeshes = 0;
+      if (run.turrets[0] && run.turrets[0].root) run.turrets[0].root.traverse(o => { if (o.isMesh) turretMeshes++; });
+      return {
+        role: window.__G.role,
+        alliesCount: run.allies.length,
+        houndMeshes,
+        legsCount: hound?.rig?.legs?.length || 0,
+        hasHeadGroup: !!hound?.rig?.headGroup,
+        hasTurretPivot: !!hound?.rig?.turretPivot,
+        hasFlipRing: !!hound?.rig?.flipRing,
+        turretsCount: run.turrets.length,
+        turretMeshes,
+        streakOn: document.querySelector('#h-streak')?.classList.contains('on') || false
+      };
+    })()`);
+    const defHudCheck = await checkOverlaps(HUD_SELECTORS);
+    assert.equal(defenderBionicCheck.role, 'defend');
+    assert.ok(defenderBionicCheck.alliesCount >= 2, 'Expected auto-spawned + [Q] Bionic Guardian Hounds');
+    assert.ok(defenderBionicCheck.houndMeshes >= 50, `Expected articulated Bionic Hound >= 50 meshes, got ${defenderBionicCheck.houndMeshes}`);
+    assert.equal(defenderBionicCheck.legsCount, 4, 'Expected 4 articulated S-curve legs');
+    assert.equal(defenderBionicCheck.hasHeadGroup, true);
+    assert.equal(defenderBionicCheck.hasTurretPivot, true);
+    assert.equal(defenderBionicCheck.hasFlipRing, true);
+    assert.ok(defenderBionicCheck.turretMeshes >= 18, `Expected upgraded PT2C Solar Sentry Turret >= 18 meshes, got ${defenderBionicCheck.turretMeshes}`);
+    assert.equal(defHudCheck.overlaps.length, 0, `Defender HUD overlap: ${JSON.stringify(defHudCheck.overlaps)}`);
+    desktopRegression.defenderBionicCheck = defenderBionicCheck;
+
     assert.equal(desktopRegression.fatal, null);
     assert.equal(desktopRegression.isTouchClass, false);
     assert.equal(desktopRegression.fpsState, 'playing');

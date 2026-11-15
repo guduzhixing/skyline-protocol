@@ -3,6 +3,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { MOBILE_PATCHES } from '../src/modules/mobile-input-aim.js';
 import { TABLETOP_PATCHES } from '../src/modules/tabletop-engine.js';
+import { BIONIC_CATHARSIS_PATCHES } from '../src/modules/bionic-hound-and-catharsis.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, '..');
@@ -87,8 +88,8 @@ function main() {
   const cssRes = replaceExact(html, cssAnchor, combinedCss, 'v3-modular-css');
   html = cssRes.text;
 
-  // 3. Inject Mobile Runtime + Aim-Assist slots and Tabletop Wargame Engine slots
-  const patches = [...MOBILE_PATCHES, ...TABLETOP_PATCHES];
+  // 3. Inject Mobile Runtime + Aim-Assist slots, Tabletop Wargame Engine slots, and Bionic Hound + Catharsis slots
+  const patches = [...MOBILE_PATCHES, ...TABLETOP_PATCHES, ...BIONIC_CATHARSIS_PATCHES];
   for (const p of patches) {
     const res = replaceExact(html, p.target, p.replacement, p.label);
     html = res.text;

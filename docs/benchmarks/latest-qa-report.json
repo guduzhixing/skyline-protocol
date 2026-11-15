@@ -1,5 +1,5 @@
 {
-  "executedAt": "2026-11-15T01:46:30.188Z",
+  "executedAt": "2026-11-15T13:46:59.727Z",
   "targetShowcase": "index.html",
   "targetPure": "dist/skyline-protocol-open.html",
   "matrices": {
@@ -167,7 +167,19 @@
       "vh": 900,
       "fatal": null,
       "fpsState": "playing",
-      "billboardsAfterDeploy": 3
+      "billboardsAfterDeploy": 3,
+      "defenderBionicCheck": {
+        "role": "defend",
+        "alliesCount": 2,
+        "houndMeshes": 99,
+        "legsCount": 4,
+        "hasHeadGroup": true,
+        "hasTurretPivot": true,
+        "hasFlipRing": true,
+        "turretsCount": 1,
+        "turretMeshes": 29,
+        "streakOn": true
+      }
     },
     "pureOpenBoot": {
       "title": "苍穹防线：零号协议 V3 · 手游×桌游双栖 3A 战术大作",
@@ -187,5 +199,5 @@
     }
   },
   "runtimeErrors": [],
-  "durationMs": 51573
+  "durationMs": 57499
 }

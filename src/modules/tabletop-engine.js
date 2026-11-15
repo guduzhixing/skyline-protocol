@@ -37,6 +37,7 @@ const TT_MAPS={
 let ttUI=document.createElement("div");ttUI.id="tt-ui";
 ttUI.innerHTML=\`
   <div class="tt-markers" id="tt-markers"></div>
+  <div class="tt-popups" id="tt-popups"></div>
   <div class="tt-top-wrap">
     <div class="tt-top">
       <div class="tt-pillbar">
@@ -73,15 +74,89 @@ document.getElementById("ui").appendChild(ttUI);
 
 let tt={
   active:!1,mode:"tt1p",round:1,maxRounds:6,side:"atk",ap:4,selectedId:null,
-  nodes:[],nodeMap:new Map(),pawns:[],turrets:[],cardsUsed:{emp:0,aid:0,spec:0},
+  nodes:[],nodeMap:new Map(),pawns:[],turrets:[],popups:[],cardsUsed:{emp:0,aid:0,spec:0},
   camYaw:0.25,camTargetYaw:0.25,camDist:42,camPitch:.88,focusX:0,focusZ:0,
   dragId:-1,lx:0,ly:0,moved:0,aiQueue:[],aiTimer:0,cardTargetMode:null,
   projVec:new W(),v1:new W(),v2:new W()
 };
 function ttGroundY(x,z){let y=i.physics&&i.physics.groundHeight?i.physics.groundHeight(x,z,6):0;return Math.max(0,Math.min(4.2,y))}
 function ttLog(msg){let el=ttUI.querySelector("#tt-log");el&&(el.innerHTML=msg)}
+function ttSpawnPopup(nodeId,text,kind="hit"){
+  let nd=tt.nodeMap.get(nodeId),box=ttUI.querySelector("#tt-popups");if(!nd||!box||!i.camera)return;
+  tt.projVec.set(nd.x,nd.y+2.2,nd.z).project(i.camera);if(tt.projVec.z>1)return;
+  let sx=Math.round((tt.projVec.x*.5+.5)*innerWidth+(Math.random()-.5)*24),sy=Math.round((-tt.projVec.y*.5+.5)*innerHeight-18);
+  let el=document.createElement("div");el.className="tt-pop "+kind,el.textContent=text;
+  el.style.transform=\`translate3d(\${sx}px,\${sy}px,0)\`,box.appendChild(el);
+  tt.popups.push({el,x:sx,y:sy,vy:-42,life:.95,max:.95});
+  for(;tt.popups.length>14;)tt.popups.shift().el.remove();
+}
 function ttDistHops(idA,idB){if(idA===idB)return 0;let q=[[idA,0]],seen=new Set([idA]);while(q.length){let [cur,d]=q.shift(),n=tt.nodeMap.get(cur);if(!n)continue;for(let nb of n.adj){if(nb===idB)return d+1;if(!seen.has(nb)){seen.add(nb);q.push([nb,d+1])}}}return 99}
-function ttBuild3DPawn(p){let g=new wt;let isAtk=p.side==="atk",col=isAtk?16758861:3729663;let mat=new Nn({color:col}),dark=i.mats.get("painted_iron",{color:1849912});let ring=new Qe(new O0(.82,1.05,24,1).rotateX(-Math.PI/2),new Nn({color:col,side:Sn}));ring.position.y=.08;g.add(ring);if(p.kind==="leader"||p.kind==="boss"){let b=new Qe(ot(.36,.44,1.35,8),dark);b.position.y=.8;let h=new Qe(new ls(.28,10,8),mat);h.position.y=1.72;g.add(b,h)}else if(p.kind==="hound"){let b=new Qe(Wi(.72,.38,1.15,.03),dark);b.position.y=.55;let visor=new Qe(Wi(.5,.18,.18,.01),mat);visor.position.set(0,.62,.58);g.add(b,visor)}else if(p.kind==="drone"){let c=new Qe(Wi(.5,.2,.75,.02),dark);c.position.y=2.2;let w=new Qe(Wi(1.4,.06,.28,.01),mat);w.position.y=2.22;g.add(c,w)}else{let b=new Qe(ot(.4,.5,1.0,8),dark);b.position.y=.5;let head=new Qe(new ls(.28,10,8),mat);head.position.y=1.18;g.add(b,head)}ttRoot.add(g),p.mesh=g;let nd=tt.nodeMap.get(p.nodeId);nd&&g.position.set(nd.x,nd.y,nd.z)}
+function ttBuild3DPawn(p){
+  let g=new wt,bodyGrp=new wt,isAtk=p.side==="atk",col=isAtk?16758861:3729663;
+  let mat=new Nn({color:col}),ivory=new Qt({color:isAtk?16115416:15266038,metalness:.3,roughness:.32}),champ=new Qt({color:12104358,metalness:.68,roughness:.26}),dark=i.mats.get("painted_iron",{color:1849912});
+  let ring=new Qe(new O0(.82,1.05,28,1).rotateX(-Math.PI/2),new Nn({color:col,side:Sn}));ring.position.y=.08;
+  let basePed=new Qe(ot(.68,.78,.12,12),dark);basePed.position.y=.06;
+  g.add(ring,basePed,bodyGrp);
+  if(p.kind==="leader"||p.kind==="boss"){
+    let torso=new Qe(Wi(.56,.68,.36,.03),ivory);torso.position.y=.98;
+    let chest=new Qe(Wi(.48,.36,.4,.02),champ);chest.position.y=1.06;
+    let head=new Qe(new ls(.24,12,10),ivory);head.position.y=1.56;
+    let visor=new Qe(Wi(.34,.09,.22,.01),mat);visor.position.set(0,1.57,.14);
+    for(let sx of[-1,1]){
+      let sh=new Qe(Wi(.2,.22,.32,.015),champ);sh.position.set(sx*.36,1.18,0);
+      let leg=new Qe(ot(.13,.11,.68,10),dark);leg.position.set(sx*.16,.38,0);
+      bodyGrp.add(sh,leg);
+    }
+    let rifle=new Qe(Si(.055,.055,.82,8),dark);rifle.position.set(.24,.98,.32);
+    let muz=new Qe(Si(.068,.068,.14,8),mat);muz.position.set(.24,.98,.72);
+    bodyGrp.add(torso,chest,head,visor,rifle,muz);
+  }else if(p.kind==="hound"){
+    let spine=new Qe(Wi(.52,.22,1.04,.04),ivory);spine.position.y=.68;
+    let belly=new Qe(Wi(.4,.16,.92,.02),dark);belly.position.y=.58;
+    let keel=new Qe(Wi(.14,.26,.18,.02),ivory);keel.position.set(0,.74,.48),keel.rotation.x=.32;
+    let hood=new Qe(Wi(.38,.16,.42,.03),ivory);hood.position.set(0,.88,.54);
+    let visor=new Qe(Wi(.32,.12,.1,.015),dark);visor.position.set(0,.87,.73);
+    let tof=new Qe(Wi(.09,.036,.04,.008),mat);tof.position.set(0,.87,.78);
+    let brow=new Qe(Wi(.18,.02,.04,.005),mat);brow.position.set(0,.93,.77);
+    for(let sx of[-1,1]){
+      let lens=new Qe(Si(.045,.045,.06,10),mat);lens.position.set(sx*.1,.87,.77);
+      bodyGrp.add(lens);
+      for(let sz of[-1,1]){
+        let drum=new Qe(Ro(.12,.12,.15,12),champ);drum.position.set(sx*.28,.66,sz*.38);
+        let cap=new Qe(Ro(.1,.085,.06,10),ivory);cap.position.set(sx*.36,.66,sz*.38);
+        let thigh=new Qe(Wi(.09,.34,.13,.015),ivory);thigh.position.set(sx*.31,.48,sz*.38-.04),thigh.rotation.x=.38;
+        let shin=new Qe(Wi(.065,.36,.085,.01),champ);shin.position.set(sx*.31,.24,sz*.38+.04),shin.rotation.x=-.32;
+        let paw=new Qe(new ls(.068,8,8),dark);paw.position.set(sx*.31,.09,sz*.38+.09);
+        bodyGrp.add(drum,cap,thigh,shin,paw);
+      }
+    }
+    let tPod=new Qe(Wi(.28,.14,.36,.015),champ);tPod.position.set(0,.86,-.04);
+    for(let sx of[-1,1]){
+      let brl=new Qe(Si(.032,.032,.52,8),dark);brl.position.set(sx*.09,.88,.24);
+      let tip=new Qe(Si(.042,.042,.1,8),mat);tip.position.set(sx*.09,.88,.48);
+      bodyGrp.add(brl,tip);
+    }
+    bodyGrp.add(spine,belly,keel,hood,visor,tof,brow,tPod);
+  }else if(p.kind==="drone"){
+    let c=new Qe(Wi(.52,.18,.82,.03),ivory);c.position.y=2.2;
+    let w=new Qe(Wi(1.48,.05,.28,.01),champ);w.position.y=2.22;
+    let eye=new Qe(new ls(.1,10,8),mat);eye.position.set(-.07,2.18,.42);
+    let eye2=new Qe(new ls(.08,10,8),mat);eye2.position.set(.07,2.18,.42);
+    p.rotors=[];
+    for(let sx of[-1,1]){
+      let nac=new Qe(ot(.09,.07,.2,10),dark);nac.position.set(sx*.68,2.24,0);
+      let rGrp=new wt;rGrp.position.set(sx*.68,2.36,0);
+      rGrp.add(new Qe(Wi(.46,.012,.045,.002),ivory),new Qe(Wi(.045,.012,.46,.002),ivory));
+      p.rotors.push(rGrp);
+      bodyGrp.add(nac,rGrp);
+    }
+    bodyGrp.add(c,w,eye,eye2);
+  }else{
+    let b=new Qe(ot(.4,.5,1.0,8),dark);b.position.y=.5;let head=new Qe(new ls(.28,10,8),mat);head.position.y=1.18;bodyGrp.add(b,head);
+  }
+  ttRoot.add(g),p.mesh=g,p.bodyGrp=bodyGrp,p.flipAnim=0;
+  let nd=tt.nodeMap.get(p.nodeId);nd&&g.position.set(nd.x,nd.y,nd.z);
+}
 function ttClearBoard(){while(ttRoot.children.length)ttRoot.remove(ttRoot.children[0]);tt.nodeMap.clear(),tt.pawns.length=0,tt.turrets.length=0}
 function ttInitBoard(mode){
   ttClearBoard(),tt.mode=mode||"tt1p",tt.round=1,tt.maxRounds=6,tt.side="atk",tt.ap=4,tt.selectedId=null,tt.cardTargetMode=null,tt.cardsUsed={emp:0,aid:0,spec:0},tt.aiQueue.length=0,tt.aiTimer=0;
@@ -178,18 +253,24 @@ function ttHandleActionNode(ndId){
   let enemies=ttNodePawns(ndId,tt.side==="atk"?"def":"atk");
   let hops=ttDistHops(sel.nodeId,ndId);
   if(enemies.length&&hops<=sel.range&&!sel.acted){
-    let tgt=enemies[0],dmg=sel.dmg+(sel.buffDmg||0);sel.buffDmg=0,sel.acted=!0,tt.ap--,tgt.hp=Math.max(0,tgt.hp-dmg);
+    let pounceBonus=(sel.kind==="hound"&&hops<=1)?8:0;
+    let tgt=enemies[0],dmg=sel.dmg+(sel.buffDmg||0)+pounceBonus;sel.buffDmg=0,sel.acted=!0,tt.ap--,tgt.hp=Math.max(0,tgt.hp-dmg);
+    sel.kind==="hound"&&(sel.flipAnim=.001);
     ttFireVisual(sel.nodeId,ndId,tgt.hp<=0?1.35:1);
+    ttSpawnPopup(ndId,pounceBonus?\`🐾-\${dmg} 扑击!\`:\`-\${dmg} HP\`,pounceBonus||tgt.hp<=0?"crit":"hit");
     if(tgt.hp<=0&&tgt.mesh){ttRoot.remove(tgt.mesh),tgt.mesh=null}
-    ttLog(\`\${sel.name} 攻击 \${tgt.name}，造成 <b>\${dmg}</b> 伤害\${tgt.hp<=0?"（击毁！）":""}\`),addScore(85,"沙盘火力命中",!1),ttRenderUI(),ttCheckWin();return;
+    ttLog(\`\${sel.name} 攻击 \${tgt.name}，造成 <b>\${dmg}</b> 伤害\${pounceBonus?"（仿生扑击+8）":""}\${tgt.hp<=0?"（击毁！）":""}\`),addScore(85,"沙盘火力命中",!1),ttRenderUI(),ttCheckWin();return;
   }
   if(sel.nodeId===ndId&&nd.type==="relay"){
-    if(tt.side==="atk"&&!nd.relayCut){nd.relayCut=!0,nd.owner="atk",tt.ap--,a(i.audio,"play","relay_cut",{gain:.9}),i.fx&&i.fx.explosion&&i.fx.explosion(new W(nd.x,nd.y+1,nd.z),1.4),ttLog(\`<b>\${nd.name}</b> 中继已成功切断！\`),addScore(180,"沙盘切断中继",!1),ttRenderUI(),ttCheckWin();return}
-    if(tt.side==="def"&&nd.relayCut){nd.relayCut=!1,nd.owner="def",tt.ap--,ttLog(\`<b>\${nd.name}</b> 中继已纳米修复！\`),addScore(150,"沙盘修复中继",!1),ttRenderUI();return}
+    if(tt.side==="atk"&&!nd.relayCut){nd.relayCut=!0,nd.owner="atk",tt.ap--,a(i.audio,"play","relay_cut",{gain:.9}),i.fx&&i.fx.explosion&&i.fx.explosion(new W(nd.x,nd.y+1,nd.z),1.4),ttSpawnPopup(ndId,"⚡中继已破!","crit"),ttLog(\`<b>\${nd.name}</b> 中继已成功切断！\`),addScore(180,"沙盘切断中继",!1),ttRenderUI(),ttCheckWin();return}
+    if(tt.side==="def"&&nd.relayCut){nd.relayCut=!1,nd.owner="def",tt.ap--,ttSpawnPopup(ndId,"🛠️中继修复!","heal"),ttLog(\`<b>\${nd.name}</b> 中继已纳米修复！\`),addScore(150,"沙盘修复中继",!1),ttRenderUI();return}
   }
-  if(hops===1&&sel.moveLeft>0){
-    sel.nodeId=ndId,sel.moveLeft--,tt.ap--,nd.owner=tt.side;
-    ttLog(\`\${sel.name} 进驻 \${nd.name}\${nd.type==="ext"&&tt.side==="atk"?"（到达撤离点）":""}\`),ttRenderUI(),ttCheckWin();return;
+  let canLeap=sel.kind==="hound"&&hops===2&&sel.moveLeft>=2;
+  if((hops===1&&sel.moveLeft>0)||canLeap){
+    sel.nodeId=ndId,sel.moveLeft-=canLeap?2:1,tt.ap--,nd.owner=tt.side;
+    sel.kind==="hound"&&(sel.flipAnim=.001);
+    canLeap&&ttSpawnPopup(ndId,"🐾仿生二段跃击!","skill");
+    ttLog(\`\${sel.name} \${canLeap?"仿生720°跃击进驻":"进驻"} \${nd.name}\${nd.type==="ext"&&tt.side==="atk"?"（到达撤离点）":""}\`),ttRenderUI(),ttCheckWin();return;
   }
   let friend=tt.pawns.find(p=>p.side===tt.side&&p.hp>0&&p.nodeId===ndId);
   if(friend){tt.selectedId=friend.id,ttRenderUI(),ttLog(\`切换选择：\${friend.name}\`)}
@@ -203,7 +284,7 @@ function ttEndTurn(){
   let supBonus=tt.nodes.filter(n=>n.type==="supply"&&n.owner===tt.side).length;
   tt.ap=4+supBonus;
   if(tt.side==="def"){
-    for(let tr of tt.turrets){let trg=tt.pawns.find(p=>p.side==="atk"&&p.hp>0&&ttDistHops(tr.nodeId,p.nodeId)<=2);if(trg){trg.hp=Math.max(0,trg.hp-24);ttFireVisual(tr.nodeId,trg.nodeId,1);if(trg.hp<=0&&trg.mesh){ttRoot.remove(trg.mesh),trg.mesh=null}ttLog(\`神眸 PT2C 云台炮塔自动齐射 \${trg.name} (-24 HP)\`)}}
+    for(let tr of tt.turrets){let trg=tt.pawns.find(p=>p.side==="atk"&&p.hp>0&&ttDistHops(tr.nodeId,p.nodeId)<=2);if(trg){trg.hp=Math.max(0,trg.hp-24);ttFireVisual(tr.nodeId,trg.nodeId,1);ttSpawnPopup(trg.nodeId,"-24 哨兵齐射","hit");if(trg.hp<=0&&trg.mesh){ttRoot.remove(trg.mesh),trg.mesh=null}ttLog(\`神眸 PT2C 云台炮塔自动齐射 \${trg.name} (-24 HP)\`)}}
     if(ttCheckWin())return;
   }
   ttSelectFirstPawn();
@@ -224,18 +305,18 @@ function ttRunAIStep(){
   for(let p of aiPawns){
     if(!p.acted){
       let opp=tt.pawns.find(e=>e.side!==tt.side&&e.hp>0&&ttDistHops(p.nodeId,e.nodeId)<=p.range);
-      if(opp){tt.selectedId=p.id,opp.hp=Math.max(0,opp.hp-p.dmg),p.acted=!0,tt.ap--,ttFireVisual(p.nodeId,opp.nodeId,opp.hp<=0?1.3:1);if(opp.hp<=0&&opp.mesh){ttRoot.remove(opp.mesh),opp.mesh=null}ttLog(\`AI \${p.name} 攻击 \${opp.name} (-\${p.dmg} HP)\`),ttRenderUI(),ttCheckWin();return}
+      if(opp){tt.selectedId=p.id,opp.hp=Math.max(0,opp.hp-p.dmg),p.acted=!0,tt.ap--,p.kind==="hound"&&(p.flipAnim=.001),ttFireVisual(p.nodeId,opp.nodeId,opp.hp<=0?1.3:1),ttSpawnPopup(opp.nodeId,\`-\${p.dmg} HP\`,"hit");if(opp.hp<=0&&opp.mesh){ttRoot.remove(opp.mesh),opp.mesh=null}ttLog(\`AI \${p.name} 攻击 \${opp.name} (-\${p.dmg} HP)\`),ttRenderUI(),ttCheckWin();return}
     }
     let nd=tt.nodeMap.get(p.nodeId);
     if(nd&&nd.type==="relay"&&((tt.side==="atk"&&!nd.relayCut)||(tt.side==="def"&&nd.relayCut))){
-      if(tt.side==="atk"){nd.relayCut=!0,nd.owner="atk",tt.ap--,ttLog(\`AI 切断中继 \${nd.name}\`)}else{nd.relayCut=!1,nd.owner="def",tt.ap--,ttLog(\`AI 修复中继 \${nd.name}\`)}
+      if(tt.side==="atk"){nd.relayCut=!0,nd.owner="atk",tt.ap--,ttSpawnPopup(nd.id,"⚡中继已破!","crit"),ttLog(\`AI 切断中继 \${nd.name}\`)}else{nd.relayCut=!1,nd.owner="def",tt.ap--,ttSpawnPopup(nd.id,"🛠️中继修复!","heal"),ttLog(\`AI 修复中继 \${nd.name}\`)}
       ttRenderUI(),ttCheckWin();return;
     }
     if(p.moveLeft>0&&nd){
       let goal=tt.nodes.find(n=>tt.side==="atk"?(n.type==="relay"&&!n.relayCut)||n.type==="ext":n.type==="relay"&&n.relayCut)||tt.nodes[5];
       let bestNb=nd.adj[0],bestD=99;
       for(let nbId of nd.adj){let hd=ttDistHops(nbId,goal.id);if(hd<bestD){bestD=hd,bestNb=nbId}}
-      if(bestNb){p.nodeId=bestNb,p.moveLeft--,tt.ap--,ttLog(\`AI \${p.name} 调动至 \${tt.nodeMap.get(bestNb).name}\`),ttRenderUI(),ttCheckWin();return}
+      if(bestNb){p.nodeId=bestNb,p.moveLeft--,tt.ap--,p.kind==="hound"&&(p.flipAnim=.001),ttLog(\`AI \${p.name} 调动至 \${tt.nodeMap.get(bestNb).name}\`),ttRenderUI(),ttCheckWin();return}
     }
   }
   ttEndTurn();
@@ -256,14 +337,14 @@ ttUI.addEventListener("click",ev=>{
     let cid=btn.dataset.cid,sel=tt.pawns.find(p=>p.id===tt.selectedId&&p.hp>0);
     if(cid==="spec"&&tt.ap>=2&&sel){
       tt.ap-=2;
-      if(tt.side==="def"){let nd=tt.nodeMap.get(sel.nodeId),tm=new Qe(ot(.32,.4,.9,8),new Nn({color:3729663}));tm.position.set(nd.x+.8,nd.y+.45,nd.z+.8),ttRoot.add(tm),tt.turrets.push({nodeId:sel.nodeId,mesh:tm}),ttLog("🛰️ 已架设【神眸 PT2C】云台自动炮塔！")}
-      else{sel.buffDmg+=25,ttLog(\`🦅 \${sel.name} 激活【BC4 Pro+ 双目锁定】下次攻击 +25 伤害！\`)}
+      if(tt.side==="def"){let nd=tt.nodeMap.get(sel.nodeId),tm=new wt,bM=new Qt({color:15266038,metalness:.3,roughness:.32}),cM=new Nn({color:3729663});let base=new Qe(ot(.28,.38,.55,10),bM);base.position.y=.28;let hd=new Qe(Wi(.36,.22,.4,.02),bM);hd.position.y=.65;let brl=new Qe(Si(.04,.04,.55,8),cM);brl.position.set(0,.65,.32);tm.add(base,hd,brl),tm.position.set(nd.x+.85,nd.y,nd.z+.85),ttRoot.add(tm),tt.turrets.push({nodeId:sel.nodeId,mesh:tm}),ttSpawnPopup(sel.nodeId,"🛰️哨兵部署!","skill"),ttLog("🛰️ 已架设【神眸 PT2C】云台自动炮塔！")}
+      else{sel.buffDmg+=25,ttSpawnPopup(sel.nodeId,"🦅双目锁定+25","skill"),ttLog(\`🦅 \${sel.name} 激活【BC4 Pro+ 双目锁定】下次攻击 +25 伤害！\`)}
     }else if(cid==="emp"&&tt.ap>=2&&tt.cardsUsed.emp===0){
       tt.ap-=2,tt.cardsUsed.emp=2;let cnt=0;
-      for(let e of tt.pawns)if(e.side!==tt.side&&e.hp>0){e.hp=Math.max(0,e.hp-25),e.stunned=!0,cnt++;if(e.hp<=0&&e.mesh){ttRoot.remove(e.mesh),e.mesh=null}}
+      for(let e of tt.pawns)if(e.side!==tt.side&&e.hp>0){e.hp=Math.max(0,e.hp-25),e.stunned=!0,cnt++,ttSpawnPopup(e.nodeId,"⚡-25 EMP眩晕","crit");if(e.hp<=0&&e.mesh){ttRoot.remove(e.mesh),e.mesh=null}}
       i.fx&&i.fx.explosion&&i.fx.explosion(new W(0,1.5,0),2),ttLog(\`⚡ 【神眸研极芯 EMP】释放！震慑敌方 \${cnt} 个单位并致其下轮眩晕！\`);
     }else if(cid==="aid"&&tt.ap>=1&&tt.cardsUsed.aid===0&&sel){
-      tt.ap--,tt.cardsUsed.aid=2,sel.hp=Math.min(sel.maxHp,sel.hp+50),ttLog(\`📦 【神眸 BC22+ 补给箱】已投送，\${sel.name} 恢复 +50 HP！\`);
+      tt.ap--,tt.cardsUsed.aid=2,sel.hp=Math.min(sel.maxHp,sel.hp+50),ttSpawnPopup(sel.nodeId,"+50 HP 补给","heal"),ttLog(\`📦 【神眸 BC22+ 补给箱】已投送，\${sel.name} 恢复 +50 HP！\`);
     }
     ttRenderUI(),ttCheckWin();return;
   }
@@ -281,7 +362,27 @@ i.tabletop={
   update(P){
     if(!tt.active)return;
     c.time+=P;
-    for(let pw of tt.pawns)pw.hp>0&&ttUpdatePawnOffset(pw);
+    for(let pi=0;pi<tt.pawns.length;pi++){
+      let pw=tt.pawns[pi];if(pw.hp<=0)continue;
+      ttUpdatePawnOffset(pw);
+      if(pw.rotors)for(let ri=0;ri<pw.rotors.length;ri++)pw.rotors[ri].rotation.y+=P*(ri%2?-24:24);
+      if(pw.bodyGrp){
+        if(pw.flipAnim>0){
+          pw.flipAnim+=P;let u=Math.min(1,pw.flipAnim/.65);
+          pw.bodyGrp.position.y=Math.sin(u*Math.PI)*1.6;
+          pw.bodyGrp.rotation.x=-u*Math.PI*4;
+          if(pw.flipAnim>=.65){pw.flipAnim=0,pw.bodyGrp.position.y=0,pw.bodyGrp.rotation.x=0}
+        }else{
+          pw.bodyGrp.position.y=Math.sin(c.time*3+pi)*.04;
+          pw.bodyGrp.rotation.x=0;
+        }
+      }
+    }
+    for(let pi=tt.popups.length-1;pi>=0;pi--){
+      let pp=tt.popups[pi];pp.life-=P,pp.y+=pp.vy*P;
+      if(pp.life<=0){pp.el.remove(),tt.popups.splice(pi,1)}
+      else{pp.el.style.transform=\`translate3d(\${pp.x}px,\${Math.round(pp.y)}px,0)\`,pp.el.style.opacity=Math.min(1,pp.life/.4).toFixed(2)}
+    }
     tt.camYaw+=(tt.camTargetYaw-tt.camYaw)*Math.min(1,P*10);
     let cy=tt.focusX+Math.sin(tt.camYaw)*Math.cos(tt.camPitch)*tt.camDist,ch=Math.sin(tt.camPitch)*tt.camDist,cz=tt.focusZ+Math.cos(tt.camYaw)*Math.cos(tt.camPitch)*tt.camDist;
     i.camera.position.set(cy,ch,cz),i.camera.lookAt(tt.focusX,1.2,tt.focusZ);
@@ -294,7 +395,7 @@ i.tabletop={
         tt.projVec.set(nd.x,nd.y+1.8,nd.z).project(i.camera);
         if(tt.projVec.z>1)continue;
         let sx=Math.max(46,Math.min(W0-46,Math.round((tt.projVec.x*.5+.5)*W0))),sy=Math.max(topSafe,Math.min(botSafe,Math.round((-tt.projVec.y*.5+.5)*H0)));
-        let ps=ttNodePawns(nd.id),hops=sel?ttDistHops(sel.nodeId,nd.id):99,en=ps.some(p=>p.side!==tt.side),reach=!!(sel&&!sel.stunned&&tt.ap>0&&(hops===1&&sel.moveLeft>0)),tgt=!!(sel&&!sel.stunned&&tt.ap>0&&en&&!sel.acted&&hops<=sel.range);
+        let ps=ttNodePawns(nd.id),hops=sel?ttDistHops(sel.nodeId,nd.id):99,en=ps.some(p=>p.side!==tt.side),reach=!!(sel&&!sel.stunned&&tt.ap>0&&((hops===1&&sel.moveLeft>0)||(sel.kind==="hound"&&hops===2&&sel.moveLeft>=2))),tgt=!!(sel&&!sel.stunned&&tt.ap>0&&en&&!sel.acted&&hops<=sel.range);
         let cls="tt-nbtn "+(nd.owner==="atk"?"atk-ctl":nd.owner==="def"?"def-ctl":"")+(reach?" reach":"")+(tgt?" target":"");
         let pNames=ps.map(p=>p.side==="atk"?"🟠"+p.name.slice(0,4):"🔵"+p.name.slice(0,4)).join(" ");
         let tag=nd.type==="relay"?(nd.relayCut?"[已破]":\`[\${nd.relay}核]\`):nd.type==="supply"?"[补给]":nd.type==="ext"?"[撤离]":"";
